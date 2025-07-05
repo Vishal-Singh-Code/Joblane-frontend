@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* ====================== */
+/*     THEME VARIABLES    */
+/* ====================== */
+@theme {
+  --color-border: hsl(var(--border));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-card: hsl(var(--card));
+
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite;
+  --animate-fade-in-delay-1: fade-in 0.6s ease-out 0.2s forwards;
+  --animate-fade-in-delay-2: fade-in 0.6s ease-out 0.4s forwards;
+  --animate-fade-in-delay-3: fade-in 0.6s ease-out 0.6s forwards;
+  --animate-fade-in-delay-4: fade-in 0.6s ease-out 0.8s forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+}
+
+/* ====================== */
+/*        BASE            */
+/* ====================== */
+@layer base {
+  :root {
+    --background: 220 40% 98%;
+    --foreground: 220 20% 12%;
+    --card: 0 0% 100%;
+    --primary: 243 75% 52%; /* Indigo 600 */
+    --primary-foreground: 0 0% 100%;  /* White */
+    --border: 220 15% 80%;
+  }
+
+  .dark {
+    --background: 222 47% 4%;
+    --foreground: 213 31% 91%;
+    --card: 222 47% 8%;
+    --primary: 243 75% 70%; /* Lighter Indigo for dark mode */
+    --primary-foreground: 213 31% 91%;
+    --border: 217 33% 20%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300 font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+
+/* ====================== */
+/*        UTILITIES       */
+/* ====================== */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  @media (width >= 640px)  { max-width: 640px; }
+  @media (width >= 768px)  { max-width: 768px; }
+  @media (width >= 1024px) { max-width: 1024px; }
+  @media (width >= 1280px) { max-width: 1280px; }
+  @media (width >= 1400px) { max-width: 1440px; }
+}
+
+@utility text-glow {
+  @apply relative;
+  text-shadow: 0 0 8px rgba(129, 140, 248, 0.4);
+}
+
+@utility card-hover {
+  @apply transition-transform duration-300 hover:scale-[1.015] hover:shadow-md;
+}
+
+@utility gradient-border {
+  @apply relative rounded-xl overflow-hidden;
+  background:
+    linear-gradient(to right, hsl(var(--card)), hsl(var(--card))),
+    linear-gradient(135deg, hsl(var(--primary)) 0%, oklch(80% 0.21 280) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1px solid transparent;
+}
+
+@utility cosmic-button {
+  @apply inline-block px-6 py-2.5 rounded-full bg-primary text-white font-semibold 
+    transition-transform duration-300 hover:bg-blue-800 hover:scale-105 active:scale-95 shadow-sm;
+}
+
+@utility cosmic-button-outline {
+  @apply inline-block px-6 py-2.5 rounded-full border border-primary text-primary font-semibold 
+    transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-lg;
+}
+
+@utility section-heading {
+  @apply text-3xl md:text-4xl font-bold tracking-tight text-primary mb-6;
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+  display: inline-flex;
+}
+
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+
