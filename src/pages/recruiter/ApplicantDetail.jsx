@@ -73,7 +73,7 @@ function ApplicantDetail() {
         <div className="text-left text-lg grid grid-cols-1 gap-6 text-foreground opacity-80 ">
           <div className="text-lg space-y-3">
             <div><span className="font-medium">Applied for:</span> {job?.title || 'N/A'}</div>
-            <div><span className="font-medium">Phone:</span> {applicant?.phone_number || 'N/A'}</div>
+            <div><span className="font-medium">Phone:</span> {applicant?.phone || 'N/A'}</div>
             <div><span className="font-medium">Location:</span> {applicant?.location || 'N/A'}</div>
             <div><span className="font-medium">Education:</span> {applicant?.education || 'N/A'}</div>
             <div className="flex flex-wrap gap-2 mt-2">
