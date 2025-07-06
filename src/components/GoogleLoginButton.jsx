@@ -1,5 +1,5 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
