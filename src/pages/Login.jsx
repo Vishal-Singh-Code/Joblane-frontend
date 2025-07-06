@@ -4,7 +4,9 @@ import { useAuth } from "../contexts/AuthContext";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { landingImg } from '../data/landingImg';
 import { EyeIcon, EyeOffIcon } from '../components/icons/PasswordIcons';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+
 
 const Login = () => {
   const { login } = useAuth();
@@ -43,7 +45,7 @@ const Login = () => {
 
     try {
       await login(formData.username, formData.password, rememberMe);
-      toast.success("Logged in successfully!"); 
+      toast.success("Logged in successfully!");
       navigate("/");
     } catch (err) {
       let message = "Something went wrong. Please try again.";
@@ -57,7 +59,7 @@ const Login = () => {
         message = err.message;
       }
 
-      toast.error(message);  
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -112,9 +114,9 @@ const Login = () => {
           <h1 className="text-4xl font-bold mb-4">Welcome Back</h1>
           <p className="text-[hsl(var(--foreground)/70%)] text-lg mb-8">
             Don’t have an account?{" "}
-            <a href="/register" className="text-[hsl(var(--primary))] hover:underline">
+            <Link to="/register" className="text-[hsl(var(--primary))] hover:underline">
               Sign up
-            </a>
+            </Link>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">

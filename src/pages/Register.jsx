@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { EyeIcon, EyeOffIcon } from '../components/icons/PasswordIcons';
 import { landingImg } from '../data/landingImg';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const { register, googleLogin } = useAuth();
@@ -128,9 +129,9 @@ const Register = () => {
           <h1 className="text-4xl font-bold mb-4">Create an Account</h1>
           <p className="text-[hsl(var(--foreground)/70%)] text-md mb-8">
             Already have an account?{' '}
-            <a href="/login" className="text-[hsl(var(--primary))] hover:underline">
-              Log in
-            </a>
+            <Link to="/login" className="text-[hsl(var(--primary))] hover:underline">
+              Sign up
+            </Link>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5 flex-grow">
