@@ -19,6 +19,8 @@ import ViewApplicants from './pages/recruiter/ViewApplicants';
 import Missing from './pages/Missing';
 import JobDetails from './pages/jobseeker/JobDetails';
 import ApplicantDetail from './pages/recruiter/ApplicantDetail';
+import JobList from './pages/recruiter/JobList';
+import CompanyProfile from './pages/recruiter/CompanyProfile';
 
 function App() {
   return (
@@ -42,8 +44,10 @@ function App() {
             {/* Recruiter Protected Routes */}
             <Route path="recruiter" element={<ProtectedRoute allowedRoles={['recruiter']} />}>
               <Route path="post-job" element={<PostJob />} />
-              <Route path="applicants" element={<ViewApplicants />} />
-              <Route path="applicants/:id" element={<ApplicantDetail />} />
+              <Route path="jobList" element={<JobList />} />
+              <Route path="company_profile" element={<CompanyProfile />} />
+              <Route path="jobs/:id/applicants" element={<ViewApplicants />} />
+              <Route path="applicant/:id" element={<ApplicantDetail />} />
             </Route>
             
             <Route path='*' element={<Missing />} />

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaShareAlt, FaRegBookmark, FaBookmark } from "react-icons/fa";
-import axios from "../../api/axios";
+import axiosJob from "../../api/axiosJob";
 import { toast } from "react-toastify";
 
 function JobDetails() {
@@ -11,7 +11,7 @@ function JobDetails() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`/jobs/${id}/`)
+        axiosJob.get(`/jobs/${id}/`)
             .then((res) => {
                 setJob(res.data);
                 setLoading(false);
@@ -24,7 +24,7 @@ function JobDetails() {
     }, [id]);
 
     useEffect(() => {
-        axios.get(`/jobs/${id}/is_saved/`)
+        axiosJob.get(`/jobs/${id}/save/`)
             .then((res) => setSaved(res.data.saved))
             .catch(() => { });
     }, [id]);
@@ -56,11 +56,11 @@ function JobDetails() {
             const url = `/jobs/${id}/save/`;
 
             if (saved) {
-                await axios.delete(url);
+                await axiosJob.delete(url);
                 setSaved(false);
                 toast.success("Job removed from saved list.");
             } else {
-                await axios.post(url);
+                await axiosJob.post(url);
                 setSaved(true);
                 toast.success("Job saved successfully!");
             }
@@ -71,10 +71,9 @@ function JobDetails() {
         }
     };
 
-
     const applyToJob = async () => {
         try {
-            const res = await axios.post(`/jobs/${id}/apply/`);
+            const res = await axiosJob.post(`/jobs/${id}/apply/`);
             toast.success(res.data.message || "Applied successfully.");
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -95,16 +94,16 @@ function JobDetails() {
 
 
     return (
-        <div className="bg-background min-h-screen py-10 px-4 sm:px-8 md:px-16 font-inter">
-            <div className="max-w-4xl mx-auto bg-card rounded-xl shadow-lg border border-border p-8 space-y-8">
+        <div className="bg-background min-h-screen py-4 px-4 sm:px-8 md:px-16 font-inter">
+            <div className="max-w-5xl mx-auto bg-card rounded-xl shadow-lg border border-border p-4 sm:p-6 space-y-8">
 
-                <div className="flex flex-row flex-wrap justify-between items-start gap-4">
+                <div className="text-left flex flex-row flex-wrap justify-between items-start gap-4 p-2">
                     <div>
                         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
                             {job.title}
                         </h1>
-                        <p className="text-xl text-foreground opacity-70 mt-1">
-                            {job.company} · {job.location}
+                        <p className="text-md sm:text-xl text-foreground opacity-70 mt-1">
+                            {job.company} - {job.location}
                         </p>
                     </div>
                     <img
@@ -116,28 +115,28 @@ function JobDetails() {
 
                 <hr className="border-border" />
 
-                <div className="grid grid-cols-4 gap-4 text-foreground opacity-80 text-sm">
+                <div className="grid grid-cols-4 sm:gap-4 opacity-80 text-sm sm:text-base">
                     <div className="flex flex-col">
-                        <span className="font-medium">CTC</span>
-                        <span>{job.ctc}</span>
+                        <span className="font-medium">Job Type</span>
+                        <span >{job.job_type}</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-medium">Start Date</span>
-                        <span>{formatFullDate(job.start_date)}</span>
+                        <span className="font-medium">CTC</span>
+                        <span >{job.ctc}</span>
                     </div>
                     <div className="flex flex-col">
                         <span className="font-medium">Experience</span>
-                        <span>{job.experience}</span>
+                        <span >{job.experience}</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-medium">Apply By</span>
-                        <span>{formatFullDate(job.deadline)}</span>
+                        <span className="font-medium">Apply by</span>
+                        <span >{formatFullDate(job.deadline)}</span>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center mt-6">
-                    <p className="text-sm text-foreground opacity-60 font-medium">Be early applicant</p>
-                    <div className="flex gap-3">
+                    <p className="text-xs sm:text-base text-foreground opacity-70 font-medium">Be early applicant</p>
+                    <div className="flex gap-2 text-sm sm:text-base sm:gap-3">
                         <button
                             onClick={toggleSave}
                             className="p-2 rounded-full border border-border bg-background hover:bg-card text-primary cursor-pointer"
@@ -163,7 +162,7 @@ function JobDetails() {
 
                 {["description", "responsibilities", "requirements"].map((section, idx) => (
                     <section key={idx} className="text-left">
-                        <h2 className="text-lg font-semibold text-foreground mb-2">
+                        <h2 className="sm:text-lg font-semibold text-foreground mb-2">
                             {{
                                 description: "About the Job",
                                 responsibilities: "Key Responsibilities",
@@ -185,7 +184,7 @@ function JobDetails() {
                 <section className="text-left">
                     <h2 className="text-lg font-semibold text-foreground mb-2">Required Skills</h2>
                     <div className="flex flex-wrap gap-2">
-                        {job.skills.map((skill, i) => (
+                        {job.skill?.map((skill, i) => (
                             <span
                                 key={i}
                                 className="bg-background text-foreground px-3 py-1 rounded-full text-sm border border-border"
@@ -199,7 +198,7 @@ function JobDetails() {
                 <section className="text-left">
                     <h2 className="text-lg font-semibold text-foreground mb-2">Perks</h2>
                     <div className="flex flex-wrap gap-2">
-                        {job.perks.map((perk, i) => (
+                        {job.perk?.map((perk, i) => (
                             <span
                                 key={i}
                                 className="bg-background text-foreground px-3 py-1 rounded-full text-sm border border-border"
@@ -213,7 +212,7 @@ function JobDetails() {
                 <div className="text-center mt-10">
                     <button
                         onClick={applyToJob}
-                        className="bg-primary hover:brightness-110 text-primary-foreground text-lg px-8 py-3 rounded-full transition font-semibold shadow cursor-pointer"
+                        className="bg-primary hover:brightness-110 text-primary-foreground text-sm sm:text-lg px-8 py-3 rounded-full transition font-semibold shadow cursor-pointer"
                     >
                         Apply Now
                     </button>

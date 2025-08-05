@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../../api/axios';
+import axiosJob from '../../api/axiosJob';
 import {toast} from 'react-toastify'
 
 function ApplicantDetail() {
@@ -11,7 +11,7 @@ function ApplicantDetail() {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-    axios.get(`/applicants/${id}/`, {
+    axiosJob.get(`/recruiter/applicants/${id}/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -24,7 +24,7 @@ function ApplicantDetail() {
   const handleStatusChange = async (newStatus) => {
     const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     try {
-      await axios.patch(`/applications/${id}/status/`, { status: newStatus }, {
+      await axiosJob.patch(`/recruiter/applicants/${id}/status/`, { status: newStatus }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStatus(newStatus);
@@ -51,20 +51,27 @@ function ApplicantDetail() {
       <div className="max-w-4xl mx-auto bg-card rounded-xl shadow-lg border border-border p-8 space-y-8">
 
         {/* Profile Pic + Name & Email */}
-        <div className=" text-left flex flex-row flex-wrap justify-between items-start gap-4">
-          <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-              {applicant?.name || 'Unknown Name'}
-            </h1>
-            <p className="text-xl text-foreground opacity-70 mt-1">{applicant?.email || 'No Email'}</p>
-          </div>
+        <div className=" text-left flex flex-row flex-wrap justify-left items-start gap-4">
           {applicant?.profile_pic ? (
-            <img src={applicant.profile_pic} alt="Profile" className="w-20 h-20 rounded-full object-cover border" />
+            <img src={applicant.profile_pic} alt="Profile" className=" w-20 h-20 rounded-full object-cover border" />
           ) : (
-            <span className="w-16 h-16 object-contain rounded-md bg-background p-2 border border-border">
+            <span className=" w-16 h-16 object-contain rounded-md bg-background p-2 border border-border">
               {applicant?.name ? applicant.name.split(' ').map(w => w[0]).join('').toUpperCase() : '👤'}
             </span>
           )}
+          <div>
+            <h1 className="text-xl text-center sm:text-left sm:text-2xl md:text-3xl font-bold text-foreground">
+              {applicant?.name || 'Unknown Name'}
+            </h1>
+            <p className="text:lg text-center sm:text-left sm:text-xl text-foreground opacity-70 mt-1">{applicant?.email || 'No Email'}</p>
+          </div>
+          {/* {applicant?.profile_pic ? (
+            <img src={applicant.profile_pic} alt="Profile" className="hidden sm:block  w-20 h-20 rounded-full object-cover border" />
+          ) : (
+            <span className="hidden sm:block w-16 h-16 object-contain rounded-md bg-background p-2 border border-border">
+              {applicant?.name ? applicant.name.split(' ').map(w => w[0]).join('').toUpperCase() : '👤'}
+            </span>
+          )} */}
         </div>
 
         <hr className="border-border" />
@@ -80,7 +87,7 @@ function ApplicantDetail() {
               <span className="text-lg font-medium">Skills:</span>
               {skillsArray.length > 0 ? (
                 skillsArray.map((skill, i) => (
-                  <span key={i} className="bg-background px-3 py-1 rounded-full text-xs border border-border">
+                  <span key={i} className="bg-background px-3 py-1 rounded-full text-sm border border-border">
                     {skill.trim()}
                   </span>
                 ))
@@ -91,7 +98,7 @@ function ApplicantDetail() {
               <select
                 value={status}
                 onChange={(e) => handleStatusChange(e.target.value)}
-                className="border border-border rounded-md p-1 bg-background text-foreground ml-3"
+                className="text-sm sm:text-base border border-border rounded-lg p-1 bg-background text-foreground ml-3"
               >
                 <option value="">Select Status</option>
                 <option value="Approved">Approved</option>

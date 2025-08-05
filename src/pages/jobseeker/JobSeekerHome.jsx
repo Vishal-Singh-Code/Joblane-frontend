@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CompactJobCard from "../../components/CompactJobCard";
 import axios from "../../api/axios";
+import axiosJob from "../../api/axiosJob"
+import CompactJobCardSkeleton from '../../components/loaders/CompactJobCardSkeleton'
 
 function JobSeekerHome() {
   const [jobs, setJobs] = useState([]);
@@ -23,7 +25,7 @@ function JobSeekerHome() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const jobsRes = await axios.get("/jobs/");
+        const jobsRes = await axiosJob.get("/jobs/");
         const shuffledJobs = shuffleArray(jobsRes.data).slice(0, 6);
         setJobs(shuffledJobs);
       } catch (err) {
@@ -37,8 +39,8 @@ function JobSeekerHome() {
     const fetchStats = async () => {
       try {
         const [appliedRes, savedRes, profileRes] = await Promise.all([
-          axios.get("/jobs/applied/"),
-          axios.get("/jobs/saved/"),
+          axiosJob.get("/applied/"),
+          axiosJob.get("/saved/"),
           axios.get("/profile/")
         ]);
 
@@ -64,7 +66,7 @@ function JobSeekerHome() {
     <div className="px-6 py-10 bg-background text-textDark min-h-screen">
 
       {/* Welcome Message */}
-      <h1 className="text-3xl font-bold mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-2">
         <span className="text-gray-700">Hi,&nbsp;</span>
         <span className="text-primary">{userName.split(' ')[0]}</span>
       </h1>
@@ -72,11 +74,11 @@ function JobSeekerHome() {
       <p className="text-gray-600 mb-10">Let’s help you land your dream job.</p>
 
       {/* Recommended Jobs */}
-      <section className="py-5 px-6 bg-background text-center">
-        <h2 className="section-heading mb-4">Recommended Jobs</h2>
-        <p className="text-secondary mb-12 text-lg">As per your preference</p>
+      <section className="py-5 sm:px-6 bg-background text-center">
+        <h2 className="section-heading text-2xl sm:text-3xl">Recommended Jobs</h2>
+        <p className="text-gray-600 mb-10 text-base sm:text-lg">As per your preference</p>
 
-        {loading && <p className="text-gray-500">Loading jobs...</p>}
+        {loading && <CompactJobCardSkeleton/>}
         {error && <p className="text-red-500">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -90,11 +92,19 @@ function JobSeekerHome() {
             </Link>
           ))}
         </div>
+         <div className="mt-10 text-center">
+        <Link
+          to="/jobs"
+          className="text-sm sm:text-md inline-block bg-primary text-white px-6 py-3 rounded-full hover:scale-[1.01] transition font-medium"
+        >
+          Explore All Jobs
+        </Link>
+      </div>
 
       </section>
 
       {/* Stats Section */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-center mt-10">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-center mt-10 sm:px-6">
         <div className="bg-white p-6 rounded-xl border shadow">
           <p className="text-2xl font-bold text-primary">{appliedCount}</p>
           <p className="text-gray-600">Applications Sent</p>
@@ -110,14 +120,7 @@ function JobSeekerHome() {
       </section>
 
       {/* CTA Button */}
-      <div className="text-center">
-        <Link
-          to="/jobs"
-          className="inline-block bg-primary text-white px-6 py-3 rounded-full hover:scale-[1.01] transition font-medium"
-        >
-          Explore All Jobs →
-        </Link>
-      </div>
+     
 
     </div>
   );

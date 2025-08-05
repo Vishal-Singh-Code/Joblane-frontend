@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import ProfilePicture from '../../components/profile/ProfilePicture';
 import ResumeUploader from '../../components/profile/ResumeUploader';
 import SkillsEditor from '../../components/profile/SkillsEditor';
-import { toast } from 'react-toastify';  // ✅ Import toast
+import { toast } from 'react-toastify';  
 
 function JobseekerProfile() {
   const { user } = useAuth();
@@ -119,21 +119,21 @@ function JobseekerProfile() {
   ];
 
   return (
-    <div className="m-6 bg-white max-w-4xl mx-auto p-6 font-inter shadow-lg rounded-xl border">
+    <div className="m-4 bg-white max-w-5xl mx-auto p-6 font-inter shadow-lg rounded-xl border">
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-primary">Profile</h1>
+      <div className="text-sm sm:text-base flex justify-between items-center mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary">Profile</h1>
         {!editing ? (
-          <button onClick={() => setEditing(true)} className="bg-primary text-white px-5 py-2 rounded-md">Edit Profile</button>
+          <button onClick={() => setEditing(true)} className="bg-primary text-white px-5 py-2 rounded-md cursor-pointer">Edit Profile</button>
         ) : (
           <div className="flex gap-3">
-            <button onClick={handleSave} className="bg-primary text-white px-5 py-2 rounded-md">Save</button>
-            <button onClick={() => setEditing(false)} className="bg-gray-200 text-gray-800 px-5 py-2 rounded-md">Cancel</button>
+            <button onClick={handleSave} className="bg-primary text-white px-5 py-2 rounded-md cursor-pointer">Save</button>
+            <button onClick={() => setEditing(false)} className="bg-gray-200 text-gray-800 px-5 py-2 rounded-md cursor-pointer">Cancel</button>
           </div>
         )}
       </div>
 
-      <ProfilePicture preview={profilePicPreview} editing={editing} onUpload={handleProfilePicUpload} />
+      <ProfilePicture preview={profilePicPreview} editing={editing} onUpload={handleProfilePicUpload} name={profile.name} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {profileFields.map(({ name, label, type }) => (

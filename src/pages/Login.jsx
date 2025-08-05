@@ -40,7 +40,6 @@ const Login = () => {
       toast.error("Please fill in all fields.");
       return;
     }
-
     setIsLoading(true);
 
     try {
@@ -66,7 +65,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] flex items-center p-4 font-inter text-[hsl(var(--foreground))]">
+    <div className="min-h-screen bg-[hsl(var(--background))] flex items-center px-2 font-inter text-[hsl(var(--foreground))]">
       <div className="bg-[hsl(var(--card))] rounded-2xl shadow-lg flex flex-col md:flex-row w-full max-w-8xl overflow-hidden border border-[hsl(var(--border))]">
 
         {/* Left: Image Section */}
@@ -95,7 +94,7 @@ const Login = () => {
 
           <div className="relative z-10 w-full h-full flex flex-col justify-between">
             <div className="flex justify-between items-center mb-8">
-              <div className="text-white text-3xl font-bold rounded-xl px-4 py-2 bg-[hsl(var(--primary))]">
+              <div className="text-white text-2xl font-bold rounded-xl px-4 py-2 bg-[hsl(var(--primary))]">
                 JobLane
               </div>
               <button
@@ -111,8 +110,8 @@ const Login = () => {
 
         {/* Right: Login Form */}
         <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-12 flex flex-col">
-          <h1 className="text-4xl font-bold mb-4">Welcome Back</h1>
-          <p className="text-[hsl(var(--foreground)/70%)] text-lg mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">Welcome Back</h1>
+          <p className="text-[hsl(var(--foreground)/70%)] text-md mb-8">
             Don’t have an account?{" "}
             <Link to="/register" className="text-[hsl(var(--primary))] hover:underline">
               Sign up

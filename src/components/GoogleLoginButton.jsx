@@ -15,7 +15,8 @@ const GoogleLoginButton = () => {
 
       try {
         const access_token = tokenResponse.access_token;
-        const response = await axios.post('https://joblane-backend-0eqs.onrender.com/api/google/', { access_token });
+        const response = await axios.post("/google/", { access_token });
+
 
         const { access, refresh, role } = response.data;
         googleLogin(access, refresh, role);

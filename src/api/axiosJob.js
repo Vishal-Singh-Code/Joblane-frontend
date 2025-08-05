@@ -1,15 +1,15 @@
 import axios from "axios";
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
-const axiosInstance = axios.create({
-  baseURL: `${API_URL}/auth`,
+const axiosJob = axios.create({
+  baseURL: `${API_URL}/api`,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Add access token before each request
-axiosInstance.interceptors.request.use((config) => {
+// Attach token from either localStorage or sessionStorage
+axiosJob.interceptors.request.use((config) => {
   const user =
     JSON.parse(localStorage.getItem("joblaneUser")) ||
     JSON.parse(sessionStorage.getItem("joblaneUser"));
@@ -19,16 +19,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// Refresh token on 401 errors
-axiosInstance.interceptors.response.use(
+// Refresh token logic
+axiosJob.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Prevent infinite loop
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
+      // Get from whichever is available
       const user =
         JSON.parse(localStorage.getItem("joblaneUser")) ||
         JSON.parse(sessionStorage.getItem("joblaneUser"));
@@ -40,29 +40,29 @@ axiosInstance.interceptors.response.use(
           });
 
           const newAccess = res.data.access;
-
-          // Save updated token in localStorage
           const updatedUser = { ...user, token: newAccess };
 
+          // Store updated token in the same storage the user came from
           if (localStorage.getItem("joblaneUser")) {
             localStorage.setItem("joblaneUser", JSON.stringify(updatedUser));
           } else if (sessionStorage.getItem("joblaneUser")) {
             sessionStorage.setItem("joblaneUser", JSON.stringify(updatedUser));
           }
 
-          // Update request with new access token
           originalRequest.headers.Authorization = `Bearer ${newAccess}`;
-          return axiosInstance(originalRequest);
+          return axiosJob(originalRequest);
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
+          // Clean up from both storages just in case
           localStorage.removeItem("joblaneUser");
           sessionStorage.removeItem("joblaneUser");
           window.location.href = "/login";
         }
       }
     }
+
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export default axiosJob;

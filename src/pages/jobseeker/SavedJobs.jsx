@@ -1,49 +1,45 @@
 import { useEffect, useState } from 'react';
-import axios from "../../api/axios";
+import axiosJob from '../../api/axiosJob';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
-
+import { Clock, Briefcase } from 'lucide-react';
+import SavedJobSkeleton  from '../../components/loaders/SavedJobSkeleton'
 
 function SavedJobs() {
   const navigate = useNavigate();
-
   const [savedJobs, setSavedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSavedJobs = async () => {
       try {
-        const response = await axios.get('/jobs/saved/');
+        const response = await axiosJob.get('/saved/');
         setSavedJobs(response.data);
       } catch (error) {
-        console.error("Failed to fetch saved jobs", error);
+        console.error('Failed to fetch saved jobs', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSavedJobs();
   }, []);
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`/jobs/${id}/save/`);
-      setSavedJobs((prev) => prev.filter(job => job.id !== id));
+      await axiosJob.delete(`/jobs/${id}/save/`);
+      setSavedJobs((prev) => prev.filter((job) => job.id !== id));
     } catch (error) {
-      console.error("Error unsaving job", error);
+      console.error('Error unsaving job', error);
     }
   };
 
   if (loading) {
-    return <p className="p-10 text-gray-500 text-center">Loading saved jobs...</p>;
+    return <SavedJobSkeleton/>
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 min-h-screen bg-background">
-
-      <h1 className="section-heading">
-        Saved Jobs
-      </h1>
+    <div className="max-w-5xl mx-auto p-6">
+      <h1 className="section-heading pb-4">Saved Jobs</h1>
 
       {savedJobs.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center mt-24 text-gray-600">
@@ -56,60 +52,76 @@ function SavedJobs() {
           <p className="text-sm">Explore opportunities and save jobs to view them later.</p>
         </div>
       ) : (
-        <div className="grid gap-6">
-          {savedJobs.map((job) => (
+        <div className="grid gap-4 grid-cols-1">
+          {savedJobs.map((job) => {
+            const isOpen = new Date(job.deadline) > new Date();
 
-            <div
-              key={job.id}
-              onClick={() => navigate(`/job/${job.id}`)}
-              className="relative p-4 sm:p-6 flex flex-row items-center gap-4 bg-white rounded-2xl border border-gray-200 shadow transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group"
-            >
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleRemove(job.id);
-                }}
-                className="absolute top-2 right-2 p-2 rounded-full bg-gray text-red-500 shadow sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition"
-                title="Remove"
+            return (
+              <div
+                key={job.id}
+                onClick={() => navigate(`/job/${job.id}`)}
+                className="relative flex items-center gap-4 p-5 rounded-2xl border border-border shadow-sm hover:shadow-md bg-white transition cursor-pointer group"
               >
-                <FaTimes size={14} />
-              </button>
+                {/* Remove Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemove(job.id);
+                  }}
+                  className="absolute top-2 right-2 p-2 rounded-full bg-gray text-gray-500 shadow sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition cursor-pointer"
+                  title="Remove"
+                >
+                  <FaTimes size={12} />
+                </button>
 
-              {/* Company Logo */}
-              <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0">
-                <img
-                  src={job.logo_url || 'https://via.placeholder.com/64'}
-                  alt={`${job.company} Logo`}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              {/* Job Info */}
-              <div className="ml-4 flex-1 min-w-[150px] text-left space-y-1">
-                <h2 className="text-sm sm:text-lg font-semibold text-gray-800 group-hover:text-primary truncate transition-colors duration-300">
-                  {job.title}
-                </h2>
-                <p className="text-xs sm:text-base text-gray-500 truncate">
-                  {job.company} &nbsp;•&nbsp; {job.location}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mt-1 text-xs sm:text-sm">
-                  <span className="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full font-semibold whitespace-nowrap">
-                    ₹ {job.ctc}
-                  </span>
-                  <span className="bg-blue-100 text-blue-700 px-2 sm:px-3 py-1 rounded-full tracking-wide font-semibold whitespace-nowrap">
-                    {job.job_type}
-                  </span>
+                {/* Company Logo */}
+                <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 mr-4">
+                  <img
+                    src={job.logo_url || `https://logo.clearbit.com/${job.company?.toLowerCase().replace(/\s+/g, '')}.com`}
+                    alt={`${job.company} Logo`}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
+
+                {/* Job Content */}
+                <div className="flex-1 min-w-[150px] space-y-1">
+                  <div className="flex justify-between items-start">
+                    <h2 className="text-base sm:text-xl font-semibold text-gray-800 group-hover:text-primary transition">
+                      {job.title}
+                    </h2>
+
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-500 flex items-center gap-1">
+                      <Briefcase className="w-4 h-4" /> {job.company}
+                    </p>
+                    <span
+                      className={`text-xs font-medium px-3 py-1 rounded-full ${isOpen ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                        }`}
+                    >
+                      {isOpen ? 'Open' : 'Closed'}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center flex-wrap gap-2 text-xs pt-2 text-gray-600">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="bg-muted px-3 py-1 rounded-full border border-border">{job.ctc}</span>
+                      <span className="bg-muted px-3 py-1 rounded-full border border-border">{job.job_type}</span>
+                    
+                    </div>
+
+                    <span className="flex items-center gap-1 ml-auto">
+                      <Clock className="w-4 h-4" /> Deadline: {new Date(job.deadline).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                </div>
+            
               </div>
-
-            </div>
-          ))}
+            );
+          })}
         </div>
-
       )}
-
     </div>
   );
 }

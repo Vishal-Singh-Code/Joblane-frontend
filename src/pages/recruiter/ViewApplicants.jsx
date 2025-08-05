@@ -1,25 +1,27 @@
 import { useEffect, useState, useMemo } from 'react';
-import axios from '../../api/axios';
-import { FaSearch, FaBriefcase } from 'react-icons/fa';
-import ApplicantCard from '../../components/ApplicantCard';
+import { useParams, useNavigate } from 'react-router-dom';
+import axiosJob from '../../api/axiosJob';
+import { FaSearch } from 'react-icons/fa';
+import { format } from 'date-fns';
+import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
+
 
 function ViewApplicants() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [jobTitleFilter, setJobTitleFilter] = useState('');
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortKey, setSortKey] = useState('applied_at');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const jobsPerPage = 6;
 
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const fetchApplicants = async () => {
       try {
-        const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-        const response = await axios.get('/recruiter/applicants/', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axiosJob.get(`/recruiter/jobs/${id}/applicants/`);
         setApplicants(response.data);
       } catch (error) {
         console.error('Failed to fetch applicant profiles:', error);
@@ -28,160 +30,178 @@ function ViewApplicants() {
       }
     };
 
-    fetchProfiles();
-  }, []);
+    fetchApplicants();
+  }, [id]);
 
   const filteredApplicants = useMemo(() => {
     return applicants.filter(app => {
-      const matchesSearch =
+      const name = app.applicant_name?.toLowerCase() || '';
+      const email = app.applicant_email?.toLowerCase() || '';
+      return (
         searchQuery === '' ||
-        (app.applicant?.first_name + ' ' + app.applicant?.last_name).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        app.applicant?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        app.job?.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesJobTitle =
-        jobTitleFilter === '' || (app.job?.title.toLowerCase().includes(jobTitleFilter.toLowerCase()));
-
-      return matchesSearch && matchesJobTitle;
+        name.includes(searchQuery.toLowerCase()) ||
+        email.includes(searchQuery.toLowerCase())
+      );
     });
-  }, [applicants, searchQuery, jobTitleFilter]);
+  }, [applicants, searchQuery]);
+
 
   const totalPages = Math.ceil(filteredApplicants.length / jobsPerPage);
-
-  const indexOfLastApplicant = currentPage * jobsPerPage;
-  const indexOfFirstApplicant = indexOfLastApplicant - jobsPerPage;
-  const currentApplicants = filteredApplicants.slice(indexOfFirstApplicant, indexOfLastApplicant);
-
+  const indexOfLast = currentPage * jobsPerPage;
+  const indexOfFirst = indexOfLast - jobsPerPage;
+  const currentApplicants = filteredApplicants.slice(indexOfFirst, indexOfLast);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, jobTitleFilter]);
+  }, [searchQuery]);
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedApplicants = [...currentApplicants].sort((a, b) => {
+    let aVal, bVal;
+
+    if (sortKey === 'applicant') {
+      aVal = `${a.applicant?.first_name || ''} ${a.applicant?.last_name || ''}`.toLowerCase();
+      bVal = `${b.applicant?.first_name || ''} ${b.applicant?.last_name || ''}`.toLowerCase();
+    } else if (sortKey === 'status') {
+      aVal = a.status?.toLowerCase?.() || '';
+      bVal = b.status?.toLowerCase?.() || '';
+    } else if (sortKey === 'applied_at') {
+      aVal = new Date(a.applied_at);
+      bVal = new Date(b.applied_at);
+    } else {
+      aVal = a[sortKey];
+      bVal = b[sortKey];
+    }
+
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+ const renderSortIcon = (key) => {
+  if (sortKey !== key) return <FaSort className="inline text-gray-400 ml-1" />;
+  return sortOrder === 'asc'
+    ? <FaSortUp className="inline text-primary ml-1" />
+    : <FaSortDown className="inline text-primary ml-1" />;
+};
+
 
   return (
     <div className="bg-background min-h-screen px-4 sm:px-10 py-6 text-textDark">
-
-      <div className="flex items-center gap-3 mb-6">
-        <button
-          onClick={() => setShowMobileFilters(true)}
-          className="inline-flex items-center gap-2 text-primary text-sm sm:text-base font-medium bg-white border border-gray-300 px-4 py-2.5 rounded-lg shadow-sm md:hidden"
-        >
-          <span className="text-base">☰</span>
-          <span className='text-base'>Filters</span>
-        </button>
-
-        <div className="flex justify-center items-center w-full py-6">
-          <div className="relative w-full max-w-5xl">
-            <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search jobs (e.g. React Developer, Google...)"
-              className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-            />
-          </div>
+      {/* Search */}
+      <div className="flex justify-center items-center w-full py-6">
+        <div className="relative w-full max-w-6xl">
+          <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search applicants by name or email..."
+            className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
+          />
         </div>
       </div>
 
-      <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-          {filteredApplicants.length} Applicant{filteredApplicants.length !== 1 && 's'} Found
-        </h1>
-        <p className="text-gray-600">Manage all your job applicants in one place.</p>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-10 justify-center mx-4 md:mx-25">
-
-        <aside className="hidden md:block md:w-1/3 bg-white border rounded-xl p-6 shadow-sm sticky top-24 h-fit">
-          <h2 className="font-semibold text-lg mb-4">Filters</h2>
-          <div className="mb-4 relative">
-            <label className="block mb-1 text-sm text-muted-foreground">Job Title</label>
-            <FaBriefcase className="absolute top-9 left-3 text-gray-400" />
-            <input
-              type="text"
-              value={jobTitleFilter}
-              onChange={(e) => setJobTitleFilter(e.target.value)}
-              placeholder="e.g. Designer"
-              className="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+      {/* Table */}
+      <div className="max-w-6xl mx-auto overflow-x-auto shadow-sm rounded-xl">
+        {loading ? (
+          <p className="text-center text-gray-500 py-6 animate-pulse">Loading applicants...</p>
+        ) : currentApplicants.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">
+            <p className="text-3xl mb-2">😕</p>
+            <p>No applicants found.</p>
           </div>
-        </aside>
+        ) : (
+          <table className="min-w-full bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
+            <thead className="bg-gray-100 text-gray-700 text-base font-medium">
+              <tr>
+                <th className="px-6 py-3 cursor-pointer" onClick={() => handleSort('applicant_name')}>
+                  Applicant {renderSortIcon('applicant')}
+                </th>
+                <th className="px-6 py-3 cursor-pointer" onClick={() => handleSort('status')}>
+                  Status {renderSortIcon('status')}
+                </th>
+                <th className="px-6 py-3 cursor-pointer" onClick={() => handleSort('applied_at')}>
+                  Applied On {renderSortIcon('applied_at')}
+                </th>
+                <th className="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
 
-        <main className="flex-1 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-          {loading ? (
-            <p className="col-span-full text-center text-gray-500 animate-pulse">Loading applicants...</p>
-          ) : currentApplicants.length === 0 ? (
-            <div className="col-span-full text-center text-gray-500 py-10">
-              <p className="text-3xl mb-2">😕</p>
-              <p>No applicants found for your search.</p>
-            </div>
-          ) : (
-            currentApplicants.map(app => (
-              <ApplicantCard key={app.id} applicantData={app} />
-            ))
-          )}
+            <tbody className="text-sm text-gray-800 divide-y divide-gray-200">
+              {sortedApplicants.map((app) => (
+                <tr key={app.id} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 whitespace-nowrap font-medium">
+                    {app.applicant_name}
+                  </td>
 
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 rounded-lg border border-gray-400 text-md disabled:opacity-50"
-              >
-                Prev
-              </button>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold 
+                      ${app.status === 'Approved' ? 'bg-green-100 text-green-700' :
+                        app.status === 'Rejected' ? 'bg-red-100 text-red-700' :
+                          'bg-yellow-100 text-yellow-700'}`}>
+                      {app.status}
+                    </span>
+                  </td>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                <button
-                  key={pageNum}
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={`px-3 py-1 rounded-lg border text-md ${currentPage === pageNum ? 'bg-primary text-white border-primary' : 'border-gray-400'}`}
-                >
-                  {pageNum}
-                </button>
+                  <td className="px-6 py-4">
+                    {format(new Date(app.applied_at), 'dd MMM yyyy')}
+                  </td>
+
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => navigate(`/recruiter/applicant/${app.id}`)}
+                      className="text-primary hover:underline font-medium text-sm"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
               ))}
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 rounded-lg border border-gray-400 text-md disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </main>
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {showMobileFilters && (
-        <div className="fixed inset-0 z-50 bg-white md:hidden overflow-y-auto pt-16 px-10">
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
           <button
-            className="absolute top-4 right-4 text-2xl text-gray-700 hover:text-black"
-            onClick={() => setShowMobileFilters(false)}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded-lg border border-gray-400 text-md disabled:opacity-50"
           >
-            ✕
+            Prev
           </button>
-          <h2 className="text-xl font-semibold text-primary mb-4">Filters</h2>
-          <div className="mb-6">
-            <label className="block mb-1 text-sm text-muted-foreground">Job Title</label>
-            <input
-              type="text"
-              value={jobTitleFilter}
-              onChange={(e) => setJobTitleFilter(e.target.value)}
-              placeholder="e.g. Developer"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+            <button
+              key={pageNum}
+              onClick={() => setCurrentPage(pageNum)}
+              className={`px-3 py-1 rounded-lg border text-md 
+                ${currentPage === pageNum ? 'bg-primary text-white border-primary' : 'border-gray-400'}`}
+            >
+              {pageNum}
+            </button>
+          ))}
 
           <button
-            onClick={() => setShowMobileFilters(false)}
-            className="mt-4 w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition"
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded-lg border border-gray-400 text-md disabled:opacity-50"
           >
-            Apply Filters
+            Next
           </button>
         </div>
       )}
-
     </div>
   );
 }

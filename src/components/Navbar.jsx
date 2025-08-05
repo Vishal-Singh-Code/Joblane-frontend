@@ -1,15 +1,15 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { LogOut } from 'lucide-react'; 
+
 
 function Navbar() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    logout("/");
     setIsMobileMenuOpen(false);
   };
 
@@ -33,21 +33,21 @@ function Navbar() {
   );
 
   const guestLinks = (
-     <>
-     
-    <NavLink
-      to="/login"
-      className="px-4 py-1 rounded-full border text-foreground border-black hover:bg-muted transition-colors"
-    >
-      Login
-    </NavLink>
-    <NavLink
-      to="/register"
-      className="px-4 py-1 rounded-full border border-blue-900 bg-primary text-white hover:bg-primary/90 transition-colors"
-    >
-      Sign Up
-    </NavLink>
-  </>
+    <>
+
+      <NavLink
+        to="/login"
+        className="px-4 py-1 rounded-full border text-foreground border-black hover:bg-muted transition-colors text-base"
+      >
+        Login
+      </NavLink>
+      <NavLink
+        to="/register"
+        className="px-4 py-1 rounded-full border border-blue-900 bg-primary text-white hover:bg-primary/90 transition-colors text-base"
+      >
+        Signup
+      </NavLink>
+    </>
   );
 
   const jobseekerLinks = (
@@ -69,8 +69,8 @@ function Navbar() {
       <NavLink to="/recruiter/post-job" className={navLinkClass}>
         Post Job
       </NavLink>
-      <NavLink to="/recruiter/applicants" className={navLinkClass}>
-        Applicants
+      <NavLink to="/recruiter/joblist" className={navLinkClass}>
+        My Job Posts
       </NavLink>
     </>
   );
@@ -80,7 +80,7 @@ function Navbar() {
       <div className="flex justify-between items-center px-4 py-3 md:px-8">
 
         {/* Logo */}
-        <NavLink to="/" className="text-3xl font-bold text-primary">
+        <NavLink to="/" className="text-2xl sm:text-3xl font-bold text-primary">
           JobLane
         </NavLink>
 
@@ -93,16 +93,17 @@ function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="text-red-500 hover:underline transition-colors"
+              className="flex items-center gap-2 text-red-500 hover:underline transition-colors"
             >
               Logout
+              <LogOut className="w-4 h-4" />
             </button>
           )}
         </div>
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-3xl text-foreground"
+          className="md:hidden text-2xl text-foreground"
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         >
           {isMobileMenuOpen ? "✕" : "☰"}
@@ -113,7 +114,7 @@ function Navbar() {
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          className="md:hidden flex flex-col gap-4 px-6 pb-4 text-lg bg-background border-t border-border transition-colors"
+          className="md:hidden flex flex-col gap-4 px-6 p-4 text-lg bg-background border-t border-border transition-colors"
         >
           {commonLinks}
           {!user && (
@@ -125,7 +126,7 @@ function Navbar() {
                 to="/register"
                 className={navLinkClass}
               >
-                Sign Up
+                Signup
               </NavLink>
             </>
           )
@@ -142,7 +143,7 @@ function Navbar() {
           )}
         </div>
       )}
-      
+
     </nav>
   );
 }

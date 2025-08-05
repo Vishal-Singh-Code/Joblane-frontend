@@ -1,48 +1,54 @@
+import { MapPin, IndianRupee, Briefcase, User } from "lucide-react";
+
 const CompactJobCard = ({ job }) => {
   const logoUrl = `https://logo.clearbit.com/${job.company.toLowerCase()}.com`;
 
   return (
-    <div className="bg-card p-5 rounded-2xl border border-border shadow group hover:shadow-lg hover:scale-[1.02] transition-all duration-300 h-full min-h-[220px] flex flex-col justify-between cursor-pointer">
+      <div className="bg-card p-6 rounded-2xl border border-border shadow group hover:shadow-xl hover:scale-[1.015] transition-all duration-300 h-full flex flex-col gap-4 cursor-pointer">
 
-      {/* Top */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="text-left">
-          <h3 className="text-xl font-semibold text-black group-hover:text-primary transition-colors duration-300">
-            {job.title}
-          </h3>
-          <p className="text-lg text-foreground opacity-60 mt-1">{job.company}</p>
+        {/* Top - Info left, logo right */}
+        <div className="flex justify-between items-start">
+          <div className="flex-1 text-left pr-4">
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+              {job.title}
+            </h3>
+            <p className="text-base text-muted-foreground">{job.company}</p>
+          </div>
+
+          <img
+            src={logoUrl || "https://placehold.co/64x64?text=🏢"}
+            alt={`${job.company} Logo`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://placehold.co/64x64?text=🏢";
+            }}
+            className="w-14 h-14 object-contain rounded bg-white p-1 flex-shrink-0"
+          />
         </div>
-        <img
-          src={logoUrl || "https://placehold.co/64x64?text=🏢"}
-          alt={`${job.company} Logo`}
-          onError={(e) => {
-            e.target.onerror = null;  
-            e.target.src = "https://placehold.co/64x64?text=🏢";
-          }}
-          className="w-16 h-20 object-contain ml-2 rounded"
-        />
-      </div>
 
-      {/* Middle - Tags */}
-      <div className="flex flex-wrap gap-2 text-sm text-foreground opacity-70">
-        <span className="bg-background px-2 py-1 rounded-full border border-border">
-          {job.location}
-        </span>
-        <span className="bg-background px-2 py-1 rounded-full border border-border">
-          {job.ctc}
-        </span>
-        <span className="bg-background px-2 py-1 rounded-full border border-border capitalize">
-          {job.job_type}
-        </span>
-      </div>
+        {/* Tags */}
+        <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            {job.location}
+          </div>
+          <div className="flex items-center gap-2">
+            <IndianRupee className="w-4 h-4" />
+            {job.ctc}
+          </div>
+          <div className="flex items-center gap-2 capitalize">
+            <Briefcase className="w-4 h-4" />
+            {job.job_type}
+          </div>
+          {(job.experience || job.experience === 0) && (
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              {job.experience === 0 ? "Fresher" : `${job.experience}+ yrs`}
+            </div>
+          )}
+        </div>
 
-      {/* CTA */}
-      <div className="mt-4 text-right">
-        <span className="text-primary text-sm font-medium hover:underline">
-          View Details
-        </span>
       </div>
-    </div>
   );
 };
 

@@ -50,7 +50,7 @@ const Register = () => {
     setError("");
 
     if (!validateForm()) {
-      toast.error("Please fix validation errors.");   // ✅ Optional: Toast for validation fail
+      toast.error("Please fix validation errors.");
       return;
     }
 
@@ -82,7 +82,7 @@ const Register = () => {
 
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] flex items-center p-4 font-inter">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] flex items-center px-2 py-2 font-inter">
       <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-2xl shadow-lg flex flex-col md:flex-row max-w-8xl w-full overflow-hidden">
 
         {/* Left: Image Section */}
@@ -110,7 +110,7 @@ const Register = () => {
 
           <div className="relative z-10 w-full h-4/5 flex flex-col justify-between">
             <div className="flex justify-between items-center mb-8">
-              <div className="text-white text-3xl font-bold rounded-xl px-4 py-2 bg-[hsl(var(--primary))]">
+              <div className="text-white text-2xl font-bold rounded-xl px-4 py-2 bg-[hsl(var(--primary))]">
                 JobLane
               </div>
               <button
@@ -125,16 +125,16 @@ const Register = () => {
         </div>
 
         {/* Right: Login Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-10 flex flex-col">
-          <h1 className="text-4xl font-bold mb-4">Create an Account</h1>
+        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-8 flex flex-col">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">Create an Account</h1>
           <p className="text-[hsl(var(--foreground)/70%)] text-md mb-8">
             Already have an account?{' '}
             <Link to="/login" className="text-[hsl(var(--primary))] hover:underline">
-              Sign up
+              log in
             </Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5 flex-grow">
+          <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
             <div className="flex bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl p-1 w-max">
               {["jobseeker", "recruiter"].map((type) => (
                 <button

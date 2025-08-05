@@ -1,12 +1,12 @@
 import { FiUpload } from 'react-icons/fi';
 
-export default function ResumeUploader({ editing, resume, onUpload, resumeLink }) {
+function ResumeUploader({ editing, resume, onUpload, resumeLink }) {
   return (
     <div className="mb-6">
-      <label className="block font-medium mb-2 text-secondary">Resume</label>
+      <label className="block font-medium mb-2 text-lg">Resume</label>
 
       {editing ? (
-        <div className="flex items-center gap-4">
+        <div className="flex justify-center gap-4">
           <label
             htmlFor="resume"
             className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900"
@@ -16,7 +16,7 @@ export default function ResumeUploader({ editing, resume, onUpload, resumeLink }
           <input
             id="resume"
             type="file"
-            accept=".pdf,.doc,.docx,.txt" 
+            accept=".pdf,.doc,.docx,.txt"
             onChange={onUpload}
             className="hidden"
           />
@@ -39,3 +39,5 @@ export default function ResumeUploader({ editing, resume, onUpload, resumeLink }
     </div>
   );
 }
+
+export default ResumeUploader;

@@ -1,24 +1,24 @@
 import { FaPlus, FaTimes } from 'react-icons/fa';
 
-export default function SkillsEditor({ skills, editing, onAdd, onRemove, skillInput, setSkillInput }) {
+function SkillsEditor({ skills, editing, onAdd, onRemove, skillInput, setSkillInput }) {
   return (
     <div className="mb-8">
       <label className="block font-semibold text-lg mb-3">Skills</label>
 
       {editing && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-5">
+        <div className="flex flex-row items-start sm:items-center gap-3 mb-5">
           <input
             type="text"
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
             placeholder="Add a skill (e.g., React)"
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-1"
           />
           <button
             onClick={onAdd}
-            className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg"
+            className="text-sm sm:text-base inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg"
           >
-            <FaPlus className="text-sm" /> Add Skill
+            <FaPlus className="text-xs sm:text-sm" /> Add Skill
           </button>
         </div>
       )}
@@ -26,7 +26,7 @@ export default function SkillsEditor({ skills, editing, onAdd, onRemove, skillIn
       {skills.length > 0 ? (
         <div className="flex flex-wrap gap-3">
           {skills.map((skill, i) => (
-            <span key={i} className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full">
+            <span key={i} className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border">
               {skill}
               {editing && (
                 <button onClick={() => onRemove(skill)} className="text-gray-500 hover:text-red-600">
@@ -42,3 +42,5 @@ export default function SkillsEditor({ skills, editing, onAdd, onRemove, skillIn
     </div>
   );
 }
+
+export default SkillsEditor
