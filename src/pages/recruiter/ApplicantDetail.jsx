@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosJob from '../../api/axiosJob';
 import {toast} from 'react-toastify'
@@ -9,31 +9,30 @@ function ApplicantDetail() {
   const [applicantData, setApplicantData] = useState(null);
   const [status, setStatus] = useState('');
 
-  useEffect(() => {
-    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-    axiosJob.get(`/recruiter/applicants/${id}/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        setApplicantData(res.data);
-        setStatus(res.data.status || '');
-      })
-      .catch((err) => console.error('Failed to load applicant details:', err));
-  }, [id]);
-
-  const handleStatusChange = async (newStatus) => {
-    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-    try {
-      await axiosJob.patch(`/recruiter/applicants/${id}/status/`, { status: newStatus }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setStatus(newStatus);
-      toast.success(`Status updated to ${newStatus}`);
-    } catch (error) {
-      console.error('Failed to update status:', error);
-      toast.error('Failed to update status');
+  useEffect(()=>{
+    const fetchApplicantDetails = async ()=>{
+      try{
+      const res = await axiosJob.get(`/recruiter/applicants/${id}/`)
+      setApplicantData(res.data)
+      setStatus(res.data.status || '');
+      }catch(err){
+        console.error('Failed to load applicant details:', err)
+      }
     }
-  };
+    fetchApplicantDetails()
+  },[id])
+  
+  const handleStatusChange = useCallback(async (newStatus) => {
+  try {
+    await axiosJob.patch(`/recruiter/applicants/${id}/status/`, { status: newStatus });
+    setStatus(newStatus);
+    toast.success(`Status updated to ${newStatus}`, { id: 'status-toast' });
+  } catch (error) {
+    console.error('Failed to update status:', error);
+    toast.error('Failed to update status', { id: 'status-error' });
+  }
+}, [id]);
+
 
   if (!applicantData) {
     return <div className="text-center py-10 text-gray-600">Loading applicant details...</div>;

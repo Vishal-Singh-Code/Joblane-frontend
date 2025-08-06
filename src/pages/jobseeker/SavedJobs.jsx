@@ -75,7 +75,7 @@ function SavedJobs() {
                 </button>
 
                 {/* Company Logo */}
-                <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 mr-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 ">
                   <img
                     src={job.logo_url || `https://logo.clearbit.com/${job.company?.toLowerCase().replace(/\s+/g, '')}.com`}
                     alt={`${job.company} Logo`}
@@ -111,7 +111,7 @@ function SavedJobs() {
                     </div>
 
                     <span className="flex items-center gap-1 ml-auto">
-                      <Clock className="w-4 h-4" /> Deadline: {new Date(job.deadline).toLocaleDateString()}
+                      <Clock className="w-4 h-4" /> Deadline: {new Date(job.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
 

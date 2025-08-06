@@ -39,11 +39,11 @@ const JobCard = ({ job }) => {
         </div>
 
         {/* Tags Section */}
-        <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-muted-foreground">
+        <div className="flex flex-wrap gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
           <span className="bg-muted px-3 py-1 rounded-full border border-border">
           {job.location}
           </span>
-          <span className="bg-muted px-3 py-1 rounded-full border border-border">
+          <span className="hidden sm:block  bg-muted px-3 py-1 rounded-full border border-border">
           {job.ctc}
           </span>
           <span className="bg-muted px-3 py-1 rounded-full border border-border capitalize">
@@ -51,7 +51,7 @@ const JobCard = ({ job }) => {
           </span>
           {(job.experience || job.experience === 0) && (
             <span className="bg-muted px-3 py-1 rounded-full border border-border">
-            {job.experience === 0 ? "Fresher" : `${job.experience}+ yrs`}
+            {job.experience === 0 ? "Fresher" : `${job.experience} yrs`}
             </span>
           )}
         </div>

@@ -43,7 +43,7 @@ function JobDetails() {
                 });
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                toast.success("Link copied to clipboard!");
+                toast.success("Link copied to clipboard!",{ id: 'share-toast' });
             }
         } catch (error) {
             console.error("Error sharing:", error);
@@ -85,17 +85,10 @@ function JobDetails() {
         }
     };
 
-    const formatFullDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        // Output: August 1, 2025
-    };
-
 
     return (
         <div className="bg-background min-h-screen py-4 px-4 sm:px-8 md:px-16 font-inter">
-            <div className="max-w-5xl mx-auto bg-card rounded-xl shadow-lg border border-border p-4 sm:p-6 space-y-8">
+            <div className="max-w-5xl mx-auto bg-card rounded-xl shadow-lg border border-border p-4 sm:p-6 space-y-4 sm:space-y-6">
 
                 <div className="text-left flex flex-row flex-wrap justify-between items-start gap-4 p-2">
                     <div>
@@ -109,7 +102,7 @@ function JobDetails() {
                     <img
                         src={job.logo_url}
                         alt={`${job.company} Logo`}
-                        className="w-16 h-16 object-contain rounded-md bg-background p-2 border border-border"
+                        className="w-16 h-16 object-contain rounded-md bg-background p-2"
                     />
                 </div>
 
@@ -130,7 +123,7 @@ function JobDetails() {
                     </div>
                     <div className="flex flex-col">
                         <span className="font-medium">Apply by</span>
-                        <span >{formatFullDate(job.deadline)}</span>
+                        <span >{new Date(job.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                     </div>
                 </div>
 

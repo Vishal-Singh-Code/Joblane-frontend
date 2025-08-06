@@ -51,9 +51,12 @@ const JobList = () => {
       setCurrentPage(page);
     }
   };
+  if (loading){
+    return <SavedJobSkeleton count={5}  />
+  }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Job Posts</h1>
 
       <div className="flex flex-row items-center gap-2 sm:gap-4 mb-6 flex-wrap">
@@ -89,9 +92,7 @@ const JobList = () => {
 
       </div>
 
-      {loading ? (
-        <SavedJobSkeleton count={5} padding='p-0' />
-      ) : filteredJobs.length === 0 ? (
+      {filteredJobs.length === 0 ? (
         <p className="text-gray-500">No jobs found.</p>
       ) : (
         <div className="grid gap-4 grid-cols-1">
@@ -130,7 +131,7 @@ const JobList = () => {
 
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    Deadline: {new Date(job.deadline).toLocaleDateString()}
+                    Deadline: {new Date(job.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
                 </div>
               </div>

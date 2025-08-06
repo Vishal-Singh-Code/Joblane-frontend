@@ -7,21 +7,32 @@ import JobCardSkeleton from "../../components/loaders/JobCardSkeleton"
 
 function JobSearch() {
   const [jobs, setJobs] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // search bar
+  const [locationSearch, setLocationSearch] = useState('');
+  const [profileSearch, setProfileSearch] = useState('');
+
+  // filters
+  const [profileFilter, setProfileFilter] = useState([]);
+  const [locationFilter, setLocationFilter] = useState([]);
   const [experienceFilter, setExperienceFilter] = useState('');
   const [jobTypeFilter, setJobTypeFilter] = useState([]);
+
+  // dropdown
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [locationFilter, setLocationFilter] = useState([]);
-  const [locationSearch, setLocationSearch] = useState('');
-  const [profileFilter, setProfileFilter] = useState([]);
-  const [profileSearch, setProfileSearch] = useState('');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
+  // mobile filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  
+  // pagination and loader
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  const jobsPerPage = 4;
 
-  const jobsPerPage = 2;
+  // fetch jobs
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -37,9 +48,9 @@ function JobSearch() {
     fetchJobs()
   }, [])
 
-
+  // refresh page after each change
   useEffect(() => {
-    setCurrentPage(1); // reset pagination when filters/search change
+    setCurrentPage(1); 
   }, [searchQuery, profileFilter, locationFilter, experienceFilter, jobTypeFilter]);
 
   const filteredJobs = jobs.filter(job => {
@@ -57,10 +68,11 @@ function JobSearch() {
       locationFilter.length === 0 ||
       locationFilter.some(loc => job.location.toLowerCase().includes(loc.toLowerCase()));
 
+    console.log(job)
     const matchesExperience =
       experienceFilter === '' ||
-      (experienceFilter === 'fresher' && parseInt(job.experience) === 0) ||
-      (experienceFilter === 'experienced' && parseInt(job.experience) > 0);
+      (experienceFilter === 'Fresher' && parseInt(job.experience) === 0) ||
+      (experienceFilter === 'Experienced' && parseInt(job.experience.trim()[0]) > 0);
 
     const matchesJobType =
       jobTypeFilter.length === 0 ||
@@ -69,29 +81,33 @@ function JobSearch() {
     return matchesSearch && matchesProfile && matchesLocation && matchesExperience && matchesJobType;
   });
 
+  // pagination 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   const commonFilterProps = {
-    profileFilter,
-    setProfileFilter,
-    experienceFilter,
-    setExperienceFilter,
-    setSearchQuery,
-    jobTypeFilter,
-    setJobTypeFilter,
-    showLocationDropdown,
-    setShowLocationDropdown,
-    locationFilter,
-    setLocationFilter,
-    locationSearch,
-    setLocationSearch,
-    showProfileDropdown,
-    setShowProfileDropdown,
     profileSearch,
     setProfileSearch,
+    locationSearch,
+    setLocationSearch,
+
+    profileFilter,
+    setProfileFilter,
+    locationFilter,
+    setLocationFilter,
+    experienceFilter,
+    setExperienceFilter,
+    jobTypeFilter,
+    setJobTypeFilter,
+
+    showProfileDropdown,
+    setShowProfileDropdown,
+    showLocationDropdown,
+    setShowLocationDropdown,
+
+    setSearchQuery,
     closeMobileFilter: null
   };
 
@@ -105,7 +121,6 @@ function JobSearch() {
           className="inline-flex items-center text-primary text-sm font-medium bg-white border border-gray-300 px-4 py-1.5 rounded-lg shadow-sm md:hidden"
         >
           <span className="text-xl">☰</span>
-          {/* <span className='text-base'>Filters</span> */}
         </button>
 
         <div className="flex justify-center items-center w-full pd-6">

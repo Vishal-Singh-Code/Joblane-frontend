@@ -1,38 +1,57 @@
+import {useState , useEffect} from 'react'
+import axiosJob from '../../api/axiosJob'
 import PropTypes from 'prop-types';
 import MultiSelectDropdown from './MultiSelectDropdown';
 import CheckboxGroup from './CheckboxGroup';
 
-const ALL_LOCATIONS = ["Remote", "Bangalore", "Mumbai", "Delhi", "Hyderabad", "Chennai"];
-const ALL_PROFILES = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Fullstack Developer",
-  "Data Analyst",
-  "UI/UX Designer",
-  "ML Engineer",
-  "Full Stack Developer"
-];
-
 function FilterJobs({
-  profileFilter,
-  setProfileFilter,
-  experienceFilter,
-  setExperienceFilter,
-  setSearchQuery,
-  closeMobileFilter,
-  jobTypeFilter,
-  setJobTypeFilter,
-  setLocationSearch,
-  locationSearch,
-  locationFilter,
-  setLocationFilter,
-  showLocationDropdown,
-  setShowLocationDropdown,
-  showProfileDropdown,
+  // serach bar
   profileSearch,
   setProfileSearch,
-  setShowProfileDropdown
+
+  locationSearch,
+  setLocationSearch,
+
+  // Filters
+  profileFilter,
+  setProfileFilter,
+
+  locationFilter,
+  setLocationFilter,
+
+  experienceFilter,
+  setExperienceFilter,
+
+  jobTypeFilter,
+  setJobTypeFilter,
+
+  // dropdown
+  showLocationDropdown,
+  setShowLocationDropdown,
+
+  showProfileDropdown,
+  setShowProfileDropdown,
+
+  // mobile view
+  setSearchQuery,
+  closeMobileFilter,
 }) {
+  const [locations, setLocations] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+  const fetchFilters = async () => {
+    try {
+      const response = await axiosJob.get('/filters/');
+      setLocations(response.data.locations);
+      setProfiles(response.data.profiles);
+    } catch (error) {
+      console.error('Error fetching filter options:', error);
+    }
+  };
+
+  fetchFilters();
+}, []);
 
   return (
     <div className="bg-card border border-border p-8 rounded-xl shadow-sm w-full md:w-auto text-foreground">
@@ -42,18 +61,18 @@ function FilterJobs({
         <div >
           <MultiSelectDropdown
             label="Job Roles"
-            options={ALL_PROFILES}
+            options={profiles}
             selected={profileFilter}
             onChange={setProfileFilter}
             searchValue={profileSearch}
             setSearchValue={(value) => {
               setProfileSearch(value);
-              setShowLocationDropdown(false);  // Close location when typing/searching
+              setShowLocationDropdown(false);  
             }}
             showDropdown={showProfileDropdown}
             setShowDropdown={(val) => {
               setShowProfileDropdown(val);
-              if (val) setShowLocationDropdown(false);  // Close location when opening profile
+              if (val) setShowLocationDropdown(false);
             }} />
         </div>
 
@@ -61,7 +80,7 @@ function FilterJobs({
         <div >
           <MultiSelectDropdown
             label="Preferred Locations"
-            options={ALL_LOCATIONS}
+            options={locations}
             selected={locationFilter}
             onChange={setLocationFilter}
             searchValue={locationSearch}
@@ -80,8 +99,8 @@ function FilterJobs({
             className="w-full border border-border rounded-md p-2 bg-background text-foreground"
           >
             <option value="">All</option>
-            <option value="fresher">Fresher</option>
-            <option value="experienced">Experienced</option>
+            <option value="Fresher">Fresher</option>
+            <option value="Experienced">Experienced</option>
           </select>
         </div>
 
@@ -108,12 +127,12 @@ function FilterJobs({
           <button
             type="button"
             onClick={() => {
-              setLocationFilter([]);
-              setExperienceFilter('');
               setSearchQuery('');
-              setJobTypeFilter([]);
               setLocationSearch('');
               setProfileFilter([]);
+              setLocationFilter([]);
+              setExperienceFilter('');
+              setJobTypeFilter([]);
               setShowLocationDropdown(false);
               setShowProfileDropdown(false);
             }}
@@ -122,6 +141,7 @@ function FilterJobs({
             Reset Filters
           </button>
         </div>
+
       </div>
     </div>
 
@@ -129,24 +149,36 @@ function FilterJobs({
 }
 
 FilterJobs.propTypes = {
-  profileFilter: PropTypes.array.isRequired,
-  setProfileFilter: PropTypes.func.isRequired,
-  experienceFilter: PropTypes.string.isRequired,
-  setExperienceFilter: PropTypes.func.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
-  closeMobileFilter: PropTypes.func,
-  jobTypeFilter: PropTypes.array.isRequired,
-  setJobTypeFilter: PropTypes.func.isRequired,
-  setLocationSearch: PropTypes.func.isRequired,
-  locationSearch: PropTypes.string.isRequired,
-  locationFilter: PropTypes.array.isRequired,
-  setLocationFilter: PropTypes.func.isRequired,
-  showLocationDropdown: PropTypes.bool.isRequired,
-  setShowLocationDropdown: PropTypes.func.isRequired,
-  showProfileDropdown: PropTypes.bool.isRequired,
+  // searchbar
   profileSearch: PropTypes.string.isRequired,
   setProfileSearch: PropTypes.func.isRequired,
-  setShowProfileDropdown: PropTypes.func.isRequired
+
+  locationSearch: PropTypes.string.isRequired,
+  setLocationSearch: PropTypes.func.isRequired,
+
+  // Filters
+  profileFilter: PropTypes.array.isRequired,
+  setProfileFilter: PropTypes.func.isRequired,
+
+  locationFilter: PropTypes.array.isRequired,
+  setLocationFilter: PropTypes.func.isRequired,
+
+  experienceFilter: PropTypes.string.isRequired,
+  setExperienceFilter: PropTypes.func.isRequired,
+
+  jobTypeFilter: PropTypes.array.isRequired,
+  setJobTypeFilter: PropTypes.func.isRequired,
+
+  // dropdowns
+  showProfileDropdown: PropTypes.bool.isRequired,
+  setShowProfileDropdown: PropTypes.func.isRequired,
+
+  showLocationDropdown: PropTypes.bool.isRequired,
+  setShowLocationDropdown: PropTypes.func.isRequired,
+
+  // mobile phone
+  setSearchQuery: PropTypes.func.isRequired,
+  closeMobileFilter: PropTypes.func,
 };
 
 export default FilterJobs;

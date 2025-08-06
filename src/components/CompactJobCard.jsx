@@ -43,7 +43,7 @@ const CompactJobCard = ({ job }) => {
           {(job.experience || job.experience === 0) && (
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              {job.experience === 0 ? "Fresher" : `${job.experience}+ yrs`}
+              {job.experience === 0 ? "Fresher" : `${job.experience} yrs`}
             </div>
           )}
         </div>

@@ -3,7 +3,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 const SavedJobSkeleton = ({ count = 3 , padding = 'p-20'}) => {
   return (
-    <div className={`w-full px-4 sm:px-8 md:px-16 ${padding} grid gap-4 grid-cols-1`}>
+    <div className={`max-w-6xl mx-auto px-4 sm:px-8 md:px-16 ${padding} grid gap-4 grid-cols-1`}>
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
