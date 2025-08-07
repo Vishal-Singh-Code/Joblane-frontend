@@ -9,7 +9,7 @@ function Footer() {
 
                 <div>
                     <h2 className="text-2xl font-bold mb-4">JobLane</h2>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
+                    <p className="text-sm leading-relaxed text-white">
                         India’s #1 Hiring Platform connecting millions of job seekers with top companies.
                     </p>
                 </div>

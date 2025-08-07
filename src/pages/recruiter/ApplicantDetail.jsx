@@ -35,7 +35,7 @@ function ApplicantDetail() {
 
 
   if (!applicantData) {
-    return <div className="text-center py-10 text-gray-600">Loading applicant details...</div>;
+    return <div className="min-h-screen text-center py-10 text-gray-600">Loading applicant details...</div>;
   }
 
   const { applicant, job } = applicantData;
@@ -64,13 +64,7 @@ function ApplicantDetail() {
             </h1>
             <p className="text:lg text-center sm:text-left sm:text-xl text-foreground opacity-70 mt-1">{applicant?.email || 'No Email'}</p>
           </div>
-          {/* {applicant?.profile_pic ? (
-            <img src={applicant.profile_pic} alt="Profile" className="hidden sm:block  w-20 h-20 rounded-full object-cover border" />
-          ) : (
-            <span className="hidden sm:block w-16 h-16 object-contain rounded-md bg-background p-2 border border-border">
-              {applicant?.name ? applicant.name.split(' ').map(w => w[0]).join('').toUpperCase() : '👤'}
-            </span>
-          )} */}
+
         </div>
 
         <hr className="border-border" />

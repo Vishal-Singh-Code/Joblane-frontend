@@ -114,7 +114,7 @@ function Navbar() {
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          className="md:hidden flex flex-col gap-4 px-6 p-4 text-lg bg-background border-t border-border transition-colors"
+          className="md:hidden flex flex-col gap-4 px-6 p-4 text-lg bg-background border-t border-border transition-colors text-center"
         >
           {commonLinks}
           {!user && (

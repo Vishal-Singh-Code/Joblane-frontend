@@ -55,15 +55,15 @@ function RecruiterHome() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 md:p-10 bg-background min-h-screen text-foreground space-y-12">
+    <div className="max-w-7xl mx-auto p-6 md:p-10 min-h-screen text-foreground space-y-12">
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-center">
           <span className="text-gray-700">Welcome Back,&nbsp;</span>
           <span className="text-primary">{recruiterName}</span>
         </h1>
-        <p className="text-gray-600 mb-10">
+        <p className="text-muted-foreground mb-10 text-center">
           Manage your job posts, track applicants, and grow your team effortlessly.
         </p>
       </div>
@@ -141,46 +141,46 @@ function RecruiterHome() {
       {/* Recent Jobs */}
       <div className="bg-card border border-border rounded-2xl shadow overflow-x-auto">
 
-<div className="min-w-[600px]">
-        {/* Header */}
-        <div className="p-6 border-b border-border">
-          <h2 className="text-xl sm:text-3xl font-semibold">Recent Job Posts</h2>
-        </div>
+        <div className="min-w-[600px]">
+          {/* Header */}
+          <div className="p-6 border-b border-border">
+            <h2 className="text-xl sm:text-3xl font-semibold text-center">Recent Job Posts</h2>
+          </div>
 
-        {/* Table Head */}
-        <div className="grid grid-cols-4 p-4 bg-muted font-bold text-sm sm:text-base uppercase tracking-wider text-muted-foreground ">
-          <div>Title</div>
-          <div>Status</div>
-          <div>Applicants</div>
-          <div>Posted On</div>
-        </div>
+          {/* Table Head */}
+          <div className="grid grid-cols-4 p-4 bg-muted font-bold text-sm sm:text-base uppercase tracking-wider text-muted-foreground ">
+            <div>Title</div>
+            <div>Status</div>
+            <div>Applicants</div>
+            <div>Posted On</div>
+          </div>
 
-        {/* Table Rows */}
-        <div className="divide-y divide-border">
-          {jobs.slice(0, 5).map((job) => (
-            <div
-              key={job.id}
-              className="grid grid-cols-4 p-4 hover:bg-muted transition text-sm">
-              <div className="font-medium text-foreground">{job.title}</div>
+          {/* Table Rows */}
+          <div className="divide-y divide-border">
+            {jobs.slice(0, 5).map((job) => (
+              <div
+                key={job.id}
+                className="grid grid-cols-4 p-4 hover:bg-muted transition text-sm sm:text-base">
+                <div className="font-medium text-foreground">{job.title}</div>
 
-              <div className={new Date(job.deadline) > new Date() ? "text-green-600 font-semibold" : "text-red-500 font-semibold"}>
-                {new Date(job.deadline) > new Date() ? 'Open' : 'Closed'}
+                <div className={new Date(job.deadline) > new Date() ? "text-green-600 font-semibold" : "text-red-500 font-semibold"}>
+                  {new Date(job.deadline) > new Date() ? 'Open' : 'Closed'}
+                </div>
+
+                <div className="text-foreground">
+                  {job.applicant_count} Applicant{job.applicant_count !== 1 && 's'}
+                </div>
+
+                <div className="text-muted-foreground">
+                  {new Date(job.created_at).toLocaleDateString()}
+                </div>
+
               </div>
+            ))}
+          </div>
 
-              <div className="text-foreground">
-                {job.applicant_count} Applicant{job.applicant_count !== 1 && 's'}
-              </div>
-
-              <div className="text-muted-foreground">
-                {new Date(job.created_at).toLocaleDateString()}
-              </div>
-
-            </div>
-          ))}
         </div>
-
       </div>
-</div>
     </div>
   );
 }

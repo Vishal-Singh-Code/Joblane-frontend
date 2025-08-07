@@ -52,11 +52,11 @@ function CompanyProfile() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow"
+      className="bg-background border border-gray space-y-4 max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow"
     >
       <label
         htmlFor="company_name"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm sm:text-lg  font-medium text-gray-700"
       >
         Company Name:
       </label>

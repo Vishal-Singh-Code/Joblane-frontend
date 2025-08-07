@@ -38,7 +38,7 @@ function SavedJobs() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className=" min-h-screen max-w-5xl mx-auto p-6">
       <h1 className="section-heading pb-4">Saved Jobs</h1>
 
       {savedJobs.length === 0 ? (
@@ -84,7 +84,7 @@ function SavedJobs() {
                 </div>
 
                 {/* Job Content */}
-                <div className="flex-1 min-w-[150px] space-y-1">
+                <div className="flex-1 min-w-[150px] text-left space-y-1">
                   <div className="flex justify-between items-start">
                     <h2 className="text-base sm:text-xl font-semibold text-gray-800 group-hover:text-primary transition">
                       {job.title}
@@ -92,7 +92,7 @@ function SavedJobs() {
 
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-500 flex items-center gap-1">
+                    <p className="text-sm sm:text-base text-gray-500 flex items-center gap-1">
                       <Briefcase className="w-4 h-4" /> {job.company}
                     </p>
                     <span
@@ -110,7 +110,7 @@ function SavedJobs() {
                     
                     </div>
 
-                    <span className="flex items-center gap-1 ml-auto">
+                    <span className="hidden sm:flex flex items-center gap-1 ml-auto">
                       <Clock className="w-4 h-4" /> Deadline: {new Date(job.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                   </div>

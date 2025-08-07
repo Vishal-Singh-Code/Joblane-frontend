@@ -30,7 +30,7 @@ function JobDetails() {
     }, [id]);
 
     if (loading || !job) {
-        return <div className="text-center py-10 text-gray-600">Loading job details...</div>;
+        return <div className="min-h-screen align-center justify-center text-center py-10 text-gray-600">Loading job details...</div>;
     }
 
     const handleShare = async () => {

@@ -66,17 +66,17 @@ function JobSeekerHome() {
     <div className="px-6 py-10 bg-background text-textDark min-h-screen">
 
       {/* Welcome Message */}
-      <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-center">
         <span className="text-gray-700">Hi,&nbsp;</span>
         <span className="text-primary">{userName.split(' ')[0]}</span>
       </h1>
 
-      <p className="text-gray-600 mb-10">Let’s help you land your dream job.</p>
+      <p className="text-muted-foreground mb-10 text-center">Let’s help you land your dream job.</p>
 
       {/* Recommended Jobs */}
       <section className="py-5 sm:px-6 bg-background text-center">
         <h2 className="section-heading text-2xl sm:text-3xl">Recommended Jobs</h2>
-        <p className="text-gray-600 mb-10 text-base sm:text-lg">As per your preference</p>
+        <p className="text-muted-foreground mb-10 text-base sm:text-lg">As per your preference</p>
 
         {loading && <CompactJobCardSkeleton/>}
         {error && <p className="text-red-500">{error}</p>}
@@ -95,7 +95,7 @@ function JobSeekerHome() {
          <div className="mt-10 text-center">
         <Link
           to="/jobs"
-          className="text-sm sm:text-md inline-block bg-primary text-white px-6 py-3 rounded-full hover:scale-[1.01] transition font-medium"
+          className="more-button"
         >
           Explore All Jobs
         </Link>

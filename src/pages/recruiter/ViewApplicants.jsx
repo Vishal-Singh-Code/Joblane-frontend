@@ -96,6 +96,8 @@ function ViewApplicants() {
 
   return (
     <div className="bg-background min-h-screen px-4 sm:px-10 py-6 text-textDark">
+            <h1 className="section-heading mb-6">Applicant List</h1>
+
       {/* Search */}
       <div className="flex justify-center items-center w-full py-6">
         <div className="relative w-full max-w-6xl">
@@ -136,7 +138,7 @@ function ViewApplicants() {
               </tr>
             </thead>
 
-            <tbody className="text-sm text-gray-800 divide-y divide-gray-200">
+            <tbody className="text-sm text-gray-800 divide-y divide-gray-200 text-center">
               {sortedApplicants.map((app) => (
                 <tr key={app.id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4 whitespace-nowrap font-medium">

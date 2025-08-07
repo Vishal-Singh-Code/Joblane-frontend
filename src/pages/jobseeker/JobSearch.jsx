@@ -143,12 +143,12 @@ function JobSearch() {
         <h1 className="section-heading mb-2">
           {filteredJobs.length} Job{filteredJobs.length !== 1 && 's'} Found
         </h1>
-        <p className="text-gray-600 text-sm sm:text-lg">Search and Apply to Latest Job Vacancies & Openings in India</p>
+        <p className="text-muted-foreground text-sm sm:text-lg text-center">Search and Apply to Latest Job Vacancies & Openings in India</p>
       </div>
 
       {/* Filters + Job List */}
       <div className="flex flex-col md:flex-row gap-10 justify-center mx-4 md:mx-25">
-        <aside className="hidden bg-secondary md:block md:w-1/3">
+        <aside className="hidden bg-background md:block md:w-1/3">
           <FilterJobs {...commonFilterProps} />
         </aside>
 

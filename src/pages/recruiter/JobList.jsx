@@ -57,9 +57,9 @@ const JobList = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Job Posts</h1>
+      <h1 className="section-heading mb-6">Your Job Posts</h1>
 
-      <div className="flex flex-row items-center gap-2 sm:gap-4 mb-6 flex-wrap">
+      <div className="flex flex-row items-center gap-2 sm:gap-4 mb-6 mt-6 flex-wrap">
 
         <select
           value={sortOption}
@@ -67,7 +67,7 @@ const JobList = () => {
             setSortOption(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-sm sm:text-base bg-white border border-gray-300 px-2 py-2 rounded-lg shadow-sm w-[110px] appearance-none bg-no-repeat bg-right"
+          className="text-sm sm:text-base bg-white border border-gray-300 px-2 py-3 rounded-lg shadow-sm w-[110px] appearance-none bg-no-repeat bg-right"
         >
           <option value="#" disabled>Sort By</option>
           <option value="newest">Newest First</option>
@@ -86,7 +86,7 @@ const JobList = () => {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="bg-white w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl shadow-md focus:outline-none text-sm sm:text-base"
+            className="bg-white w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-md focus:outline-none text-sm sm:text-base"
           />
         </div>
 

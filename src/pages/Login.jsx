@@ -109,11 +109,11 @@ const Login = () => {
         </div>
 
         {/* Right: Login Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-12 flex flex-col">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">Welcome Back</h1>
-          <p className="text-[hsl(var(--foreground)/70%)] text-md mb-8">
+        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-12 flex flex-col text-center ">
+          <h1 className="section-heading">Welcome Back</h1>
+          <p className="text-muted-foreground text-md mb-8">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[hsl(var(--primary))] hover:underline">
+            <Link to="/register" className="text-primary hover:underline">
               Sign up
             </Link>
           </p>

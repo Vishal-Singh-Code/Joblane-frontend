@@ -30,7 +30,7 @@ function Applications() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 bg-background min-h-screen font-inter">
+    <div className="max-w-5xl mx-auto px-4 py-4  min-h-screen font-inter">
       <h1 className="section-heading pb-4">Your Applications</h1>
 
       {applications.length === 0 ? (
@@ -70,7 +70,7 @@ function Applications() {
                   <h2 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-primary truncate">
                     {job.title}
                   </h2>
-                  <p className="text-sm text-gray-500 flex items-center gap-1">
+                  <p className="text-sm sm:text-base text-gray-500 flex items-center gap-1">
                     <Briefcase className="w-4 h-4" /> {job.company}
                   </p>
 

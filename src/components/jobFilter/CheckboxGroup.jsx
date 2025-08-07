@@ -11,7 +11,7 @@ function CheckboxGroup({ label, options, selected, onChange }) {
 
   return (
     <div>
-      <label className="block text-md font-medium text-secondary mb-2">
+      <label className="block text-md font-medium text-gray mb-2">
         {label}
       </label>
       <div className="space-y-2 text-sm text-foreground">

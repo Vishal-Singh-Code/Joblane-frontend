@@ -34,10 +34,10 @@ function LandingPage() {
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between px-10 sm:px-15 bg-card">
         <div className="md:w-1/2 text-center md:text-left mt-20 mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-primary leading-tight">
             India’s #1 Hiring Platform.
           </h1>
-          <p className="mt-4 text-lg text-foreground opacity-80">
+          <p className="mt-4 sm:text-lg text-foreground opacity-80">
             Find your dream job or the perfect hire in minutes.
           </p>
           <div className="mt-12 flex flex-wrap justify-center md:justify-start gap-4">
@@ -61,9 +61,9 @@ function LandingPage() {
 
       {/* Marquee Section */}
       <section className="bg-white overflow-hidden border-b flex items-center">
-        <div className="flex-shrink-0 min-w-[120px] pl-4 pr-5 sm:pr-8 pt-4 pb-4 text-primary">
+        <div className="flex-shrink-0 min-w-[120px] pl-4 pr-5 sm:pr-8 pt-4 pb-4 text-primary text-center">
           <h2 className="font-bold text-3xl sm:text-5xl leading-tight">10k+</h2>
-          <p className="text-sm sm:text-lg font-medium">openings daily</p>
+          <p className="text-sm sm:text-lg font-medium text-foreground opacity-90">openings daily</p>
         </div>
         <div className="text-4xl sm:text-5xl font-bold flex items-center text-primary sm:mx-4">|</div>
         <div className="overflow-hidden flex-1">
@@ -90,8 +90,8 @@ function LandingPage() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <Link to="/jobs" className="cosmic-button text-sm">
-            View More Jobs
+          <Link to="/jobs" className="more-button">
+            View More
           </Link>
         </div>
       </section>
@@ -100,7 +100,7 @@ function LandingPage() {
       <section className="px-6 bg-background text-center">
         <h2 className="section-heading">Success Stories</h2>
         <p className="text-gray-600 mb-10 text-base sm:text-lg">28,48,723+ placements — read their stories</p>
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <div className="bg-white border border-gray-200 p-6 rounded-xl shadow hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-3">Landed My Dream Job</h3>
             <p className="text-gray-600 italic">

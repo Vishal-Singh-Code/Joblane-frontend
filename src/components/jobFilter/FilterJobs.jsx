@@ -92,7 +92,7 @@ function FilterJobs({
 
         {/* Experience Filter */}
         <div>
-          <label className="block text-md font-medium text-secondary mb-1">Experience</label>
+          <label className="block text-md font-medium text-black mb-1">Experience</label>
           <select
             value={experienceFilter}
             onChange={(e) => setExperienceFilter(e.target.value)}
