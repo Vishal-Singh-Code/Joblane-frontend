@@ -177,7 +177,7 @@ function JobDetails() {
                 <section className="text-left">
                     <h2 className="text-lg font-semibold text-foreground mb-2">Required Skills</h2>
                     <div className="flex flex-wrap gap-2">
-                        {job.skill?.map((skill, i) => (
+                        {job.skills?.map((skill, i) => (
                             <span
                                 key={i}
                                 className="bg-background text-foreground px-3 py-1 rounded-full text-sm border border-border"
@@ -191,7 +191,7 @@ function JobDetails() {
                 <section className="text-left">
                     <h2 className="text-lg font-semibold text-foreground mb-2">Perks</h2>
                     <div className="flex flex-wrap gap-2">
-                        {job.perk?.map((perk, i) => (
+                        {job.perks?.map((perk, i) => (
                             <span
                                 key={i}
                                 className="bg-background text-foreground px-3 py-1 rounded-full text-sm border border-border"

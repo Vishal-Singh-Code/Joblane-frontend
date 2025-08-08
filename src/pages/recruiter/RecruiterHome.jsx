@@ -101,7 +101,7 @@ function RecruiterHome() {
         >
           <Building2 className="w-8 h-8 mb-4 text-primary text-primary group-hover:text-white transition" />
           <div className="text-xl font-semibold mb-1">Company Profile</div>
-          <p className="text-sm text-muted-foreground">Update your profile and company info.</p>
+          <p className="text-sm text-muted-foreground group-hover:text-white/80 transition">Update your profile and company info.</p>
         </button>
       </div>
 
