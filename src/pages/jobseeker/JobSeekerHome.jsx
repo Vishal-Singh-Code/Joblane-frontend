@@ -71,7 +71,9 @@ function JobSeekerHome() {
         <span className="text-primary">{userName.split(' ')[0]}</span>
       </h1>
 
-      <p className="text-muted-foreground mb-10 text-center">Let’s help you land your dream job.</p>
+      <p className="text-muted-foreground text-sm sm:text-lg text-center">
+        Let’s help you land your dream job.
+      </p>
 
       {/* Recommended Jobs */}
       <section className="py-5 sm:px-6 bg-background text-center">

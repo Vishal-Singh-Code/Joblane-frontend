@@ -111,12 +111,17 @@ const Login = () => {
         {/* Right: Login Form */}
         <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-12 flex flex-col text-center ">
           <h1 className="section-heading">Welcome Back</h1>
-          <p className="text-muted-foreground text-md mb-8">
+          <p className="text-gray-600 text-md mb-8">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-primary hover:underline">
+            <Link
+              to="/register"
+              className="text-blue-700 hover:underline font-medium"
+            >
               Sign up
             </Link>
           </p>
+
+
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <input

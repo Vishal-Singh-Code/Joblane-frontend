@@ -45,7 +45,7 @@ function Footer() {
                 </div>
             </div>
 
-            <div className="border-t border-border mt-8 pt-6 text-center text-sm text-muted-foreground">
+            <div className="border-t border-border mt-8 pt-6 text-center text-sm text-white">
                 &copy; {new Date().getFullYear()} JobLane. All rights reserved.
             </div>
         </footer>

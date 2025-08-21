@@ -47,7 +47,9 @@
   }
 }
 
-
+body {
+  background-color: hsl(var(--background));
+}
 
 .animate-marquee {
     animation: marquee 20s linear infinite;
@@ -76,11 +78,11 @@
 
 
   .cosmic-button {
-  @apply sm:text-xl bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold hover:opacity-90 transition;
+  @apply sm:text-xl bg-primary text-primary-foreground px-6 py-2 rounded-full font-semibold hover:opacity-90 transition;
 }
 
 .cosmic-button-outline {
-  @apply sm:text-xl border border-primary text-primary px-6 py-3 rounded-full font-semibold 
+  @apply sm:text-xl border border-primary text-primary px-6 py-2 rounded-full font-semibold 
   hover:bg-primary hover:text-primary-foreground transition;
 }
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosJob from '../../api/axiosJob';
 import { Briefcase } from 'lucide-react';
-import SavedJobSkeleton  from '../../components/loaders/SavedJobSkeleton'
+import SavedJobSkeleton from '../../components/loaders/SavedJobSkeleton'
 
 
 function Applications() {
@@ -11,7 +11,7 @@ function Applications() {
   const [loading, setLoading] = useState(true);
 
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchAppliedJobs = async () => {
       try {
         const response = await axiosJob.get('/applied/');
@@ -24,14 +24,17 @@ function Applications() {
     };
     fetchAppliedJobs();
   }, []);
-  
+
   if (loading) {
-    return <SavedJobSkeleton/>
+    return <SavedJobSkeleton />
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4  min-h-screen font-inter">
-      <h1 className="section-heading pb-4">Your Applications</h1>
+    <div className="bg-background px-4 py-4  min-h-screen font-inter">
+      <h1 className="section-heading ">Your Applications</h1>
+      <p className="text-muted-foreground text-sm sm:text-lg text-center pb-6">
+        View the jobs you’ve applied to and monitor their progress.
+      </p>
 
       {applications.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center text-gray-600 mt-20">
@@ -46,7 +49,7 @@ function Applications() {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="max-w-5xl mx-auto space-y-4">
           {applications.map((application) => {
             const { job, status, applied_at } = application;
 
@@ -88,10 +91,9 @@ function Applications() {
                 <div className="flex flex-col items-end justify-center gap-1 min-w-[90px] text-right">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-xs sm:text-xs font-semibold 
-                      ${
-                        status === 'Approved'
-                          ? 'bg-green-100 text-green-700'
-                          : status === 'Rejected'
+                      ${status === 'Approved'
+                        ? 'bg-green-100 text-green-700'
+                        : status === 'Rejected'
                           ? 'bg-red-100 text-red-700'
                           : 'bg-yellow-100 text-yellow-700'
                       }`}

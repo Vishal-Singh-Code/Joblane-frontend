@@ -212,7 +212,7 @@ function PostJob() {
                     <button
                       type="button"
                       onClick={() => removeArrayField(field, index)}
-                      className="text-red-500 hover:text-red-700 text-sm"
+                      className="text-red-600 hover:text-red-800 text-sm font-semibold"
                     >
                       Remove
                     </button>
@@ -221,7 +221,7 @@ function PostJob() {
                 <button
                   type="button"
                   onClick={() => addArrayField(field)}
-                  className="text-indigo-600 text-md mt-1 hover:underline"
+                  className="text-indigo-600 text-md mt-1 hover:underline "
                 >
                   + Add {label.slice(0, -1)}
                 </button>

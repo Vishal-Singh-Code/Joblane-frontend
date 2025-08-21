@@ -1,7 +1,7 @@
 import { MapPin, IndianRupee, Briefcase, User } from "lucide-react";
 
 const CompactJobCard = ({ job }) => {
-  const logoUrl = `https://logo.clearbit.com/${job.company.toLowerCase()}.com`;
+  const logoUrl = `https://logo.clearbit.com/${job.company.toLowerCase()}.com?size=48`;
 
   return (
       <div className="bg-card p-6 rounded-2xl border border-border shadow group hover:shadow-xl hover:scale-[1.015] transition-all duration-300 h-full flex flex-col gap-4 cursor-pointer">

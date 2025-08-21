@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const JobCard = ({ job }) => {
   const getCompanyLogoUrl = (companyName) => {
     const sanitizedCompanyName = companyName.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const clearbitUrl = `https://logo.clearbit.com/${sanitizedCompanyName}.com`;
+    const clearbitUrl = `https://logo.clearbit.com/${sanitizedCompanyName}.com?size=48`;
     return sanitizedCompanyName.length < 2
       ? "https://via.placeholder.com/40?text=🏢"
       : clearbitUrl;
@@ -40,17 +40,17 @@ const JobCard = ({ job }) => {
 
         {/* Tags Section */}
         <div className="flex flex-wrap gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
-          <span className="bg-muted px-3 py-1 rounded-full border border-border">
+          <span className="px-3 py-1 rounded-full border border-border">
           {job.location}
           </span>
-          <span className="hidden sm:block  bg-muted px-3 py-1 rounded-full border border-border">
+          <span className="hidden sm:block px-3 py-1 rounded-full border border-border">
           {job.ctc}
           </span>
-          <span className="bg-muted px-3 py-1 rounded-full border border-border capitalize">
+          <span className="px-3 py-1 rounded-full border border-border capitalize">
           {job.job_type}
           </span>
           {(job.experience || job.experience === 0) && (
-            <span className="bg-muted px-3 py-1 rounded-full border border-border">
+            <span className="px-3 py-1 rounded-full border border-border">
             {job.experience === 0 ? "Fresher" : `${job.experience} yrs`}
             </span>
           )}

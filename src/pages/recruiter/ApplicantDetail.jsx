@@ -94,7 +94,7 @@ function ApplicantDetail() {
                 className="text-sm sm:text-base border border-border rounded-lg p-1 bg-background text-foreground ml-3"
               >
                 <option value="">Select Status</option>
-                <option value="Approved">Approved</option>
+                <option value="Shortlisted">Shortlisted</option>
                 <option value="Rejected">Rejected</option>
                 <option value="Pending">Pending</option>
               </select>

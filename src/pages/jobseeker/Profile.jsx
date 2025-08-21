@@ -119,7 +119,8 @@ function JobseekerProfile() {
   ];
 
   return (
-    <div className="m-4 bg-white max-w-5xl mx-auto p-6 font-inter shadow-lg rounded-xl border">
+    <div className='bg-background p-4'>
+    <div className=" bg-white max-w-5xl mx-auto p-6 font-inter shadow-lg rounded-xl border">
 
       <div className="text-sm sm:text-base flex justify-between items-center mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-primary">Profile</h1>
@@ -173,6 +174,7 @@ function JobseekerProfile() {
         skillInput={skillInput}
         setSkillInput={setSkillInput}
       />
+    </div>
     </div>
   );
 }

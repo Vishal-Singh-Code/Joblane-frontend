@@ -3,7 +3,7 @@ import axiosJob from '../../api/axiosJob';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import { Clock, Briefcase } from 'lucide-react';
-import SavedJobSkeleton  from '../../components/loaders/SavedJobSkeleton'
+import SavedJobSkeleton from '../../components/loaders/SavedJobSkeleton'
 
 function SavedJobs() {
   const navigate = useNavigate();
@@ -34,12 +34,15 @@ function SavedJobs() {
   };
 
   if (loading) {
-    return <SavedJobSkeleton/>
+    return <SavedJobSkeleton />
   }
 
   return (
-    <div className=" min-h-screen max-w-5xl mx-auto p-6">
-      <h1 className="section-heading pb-4">Saved Jobs</h1>
+    <div className="bg-background min-h-screen mx-auto p-6">
+      <h1 className="section-heading">Saved Jobs</h1>
+      <p className="text-muted-foreground text-sm sm:text-lg text-center pb-6">
+        Review your saved job listings below.
+      </p>
 
       {savedJobs.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center mt-24 text-gray-600">
@@ -52,7 +55,7 @@ function SavedJobs() {
           <p className="text-sm">Explore opportunities and save jobs to view them later.</p>
         </div>
       ) : (
-        <div className="grid gap-4 grid-cols-1">
+        <div className="mx-auto max-w-5xl grid gap-4 grid-cols-1">
           {savedJobs.map((job) => {
             const isOpen = new Date(job.deadline) > new Date();
 
@@ -96,7 +99,7 @@ function SavedJobs() {
                       <Briefcase className="w-4 h-4" /> {job.company}
                     </p>
                     <span
-                      className={`text-xs font-medium px-3 py-1 rounded-full ${isOpen ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                      className={`text-xs font-medium px-3 py-1 rounded-full ${isOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}
                     >
                       {isOpen ? 'Open' : 'Closed'}
@@ -107,7 +110,7 @@ function SavedJobs() {
                     <div className="flex flex-wrap gap-2">
                       <span className="bg-muted px-3 py-1 rounded-full border border-border">{job.ctc}</span>
                       <span className="bg-muted px-3 py-1 rounded-full border border-border">{job.job_type}</span>
-                    
+
                     </div>
 
                     <span className="hidden sm:flex flex items-center gap-1 ml-auto">
@@ -116,7 +119,7 @@ function SavedJobs() {
                   </div>
 
                 </div>
-            
+
               </div>
             );
           })}

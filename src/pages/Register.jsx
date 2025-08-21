@@ -127,9 +127,9 @@ const Register = () => {
         {/* Right: Login Form */}
         <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-8 flex flex-col text-center">
           <h1 className="section-heading">Create an Account</h1>
-          <p className="text-muted-foreground text-md mb-8">
+          <p className="text-gray-600 text-md mb-8">
             Already have an account?{' '}
-            <Link to="/login" className="text-[hsl(var(--primary))] hover:underline">
+            <Link to="/login" className="text-blue-700 hover:underline font-medium">
               log in
             </Link>
           </p>
@@ -155,7 +155,7 @@ const Register = () => {
               placeholder="Username"
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
-              autocomplete="off"
+              autoComplete="off"
               required
             />
 
@@ -167,7 +167,7 @@ const Register = () => {
                 placeholder="First name"
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                 className="bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
-                autocomplete="off"
+                autoComplete="off"
                 required
               />
               <input
@@ -177,7 +177,7 @@ const Register = () => {
                 placeholder="Last name"
                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                 className="bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
 
@@ -188,7 +188,7 @@ const Register = () => {
               placeholder="Email"
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
-              autocomplete="off"
+              autoComplete="off"
               required
             />
 
@@ -216,7 +216,7 @@ const Register = () => {
               <input
                 type="checkbox"
                 id="terms"
-                className="accent-[hsl(var(--primary))] h-5 w-5"
+                className="accent-[hsl(var(--primary))] h-4 w-4"
                 required
               />
               <label htmlFor="terms" className="text-[hsl(var(--foreground)/70%)] text-sm">

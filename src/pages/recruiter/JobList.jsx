@@ -56,10 +56,11 @@ const JobList = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="bg-background p-6">
       <h1 className="section-heading mb-6">Your Job Posts</h1>
+      <p className="text-muted-foreground text-sm sm:text-lg text-center">Easily manage all your job postings, track applicants, and keep your listings up to date.</p>
 
-      <div className="flex flex-row items-center gap-2 sm:gap-4 mb-6 mt-6 flex-wrap">
+      <div className="max-w-5xl mx-auto flex flex-row items-center gap-2 sm:gap-4 mb-6 mt-6 flex-wrap">
 
         <select
           value={sortOption}
@@ -67,7 +68,7 @@ const JobList = () => {
             setSortOption(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-sm sm:text-base bg-white border border-gray-300 px-2 py-3 rounded-lg shadow-sm w-[110px] appearance-none bg-no-repeat bg-right"
+          className="text-sm sm:text-base bg-white border border-gray-300 px-2 py-3 rounded-lg shadow-sm w-[90px] bg-no-repeat bg-right"
         >
           <option value="#" disabled>Sort By</option>
           <option value="newest">Newest First</option>
@@ -95,7 +96,7 @@ const JobList = () => {
       {filteredJobs.length === 0 ? (
         <p className="text-gray-500">No jobs found.</p>
       ) : (
-        <div className="grid gap-4 grid-cols-1">
+        <div className="max-w-5xl mx-auto grid gap-4 grid-cols-1">
           {paginatedJobs.map((job) => {
             const isOpen = new Date(job.deadline) > new Date();
 
@@ -109,7 +110,7 @@ const JobList = () => {
                   <h2 className="text-lg sm:text-xl font-semibold text-foreground group-hover:text-primary">
                     {job.title}
                   </h2>
-                  <span className={`text-sm font-semibold px-2 py-1 rounded-full ${isOpen ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'}`}>
+                  <span className={`text-sm font-semibold px-2 py-1 rounded-full ${isOpen ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
                     {isOpen ? 'Open' : 'Closed'}
                   </span>
                 </div>

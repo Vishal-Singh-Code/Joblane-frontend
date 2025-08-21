@@ -124,14 +124,14 @@ function JobSearch() {
         </button>
 
         <div className="flex justify-center items-center w-full pd-6">
-          <div className="relative w-full max-w-5xl">
+          <div className="relative w-full max-w-6xl">
             <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search jobs (e.g. React Developer)"
-              className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-md focus:outline-none text-sm sm:text-base"
+              className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-2xl sm:rounded-full shadow-md focus:outline-none text-sm sm:text-base"
             />
           </div>
         </div>

@@ -15,7 +15,7 @@ function Navbar() {
 
   const navLinkClass = ({ isActive }) =>
     isActive
-      ? "text-xl text-primary font-semibold"
+      ? "text-xl text-primary font-semibold sm:border-b-2 sm:border-primary"
       : "text-xl text-foreground hover:text-primary transition-colors";
 
   const commonLinks = (
@@ -70,7 +70,7 @@ function Navbar() {
         Post Job
       </NavLink>
       <NavLink to="/recruiter/joblist" className={navLinkClass}>
-        My Job Posts
+       Job Posts
       </NavLink>
     </>
   );
@@ -93,7 +93,7 @@ function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 text-red-500 hover:underline transition-colors"
+              className="flex items-center gap-2 text-red-600 hover:underline transition-colors cursor-pointer"
             >
               Logout
               <LogOut className="w-4 h-4" />
@@ -136,7 +136,7 @@ function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="text-xl text-red-500 hover:underline"
+              className="text-xl text-red-600 hover:underline"
             >
               Logout
             </button>
