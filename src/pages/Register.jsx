@@ -14,6 +14,7 @@ const Register = () => {
   const [role, setRole] = useState("jobseeker");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     username: "",
@@ -53,7 +54,7 @@ const Register = () => {
       toast.error("Please fix validation errors.");
       return;
     }
-
+    setIsLoading(true);
     try {
       const response = await register({
         username: formData.username,
@@ -63,13 +64,12 @@ const Register = () => {
         role,
       });
 
-      if (response?.access && response?.refresh) {
-        googleLogin(response.access, response.refresh, response.role);
-        toast.success("Account created successfully!");
-        navigate("/");
+      // Redirect to OTP page instead of logging in
+      if (response?.message) {
+        toast.success(response.message); // "User registered successfully. Please verify OTP."
+        navigate(`/verify-otp?email=${formData.email}`);
       } else {
-        toast.info("Account created. Please log in.");
-        navigate("/login");
+        toast.error("Something went wrong. Please try again.");
       }
 
     } catch (err) {
@@ -77,8 +77,11 @@ const Register = () => {
       const errorMessage = err.response?.data?.error || err.message || "Registration failed.";
       setError(errorMessage);
       toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
+
 
 
   return (
@@ -229,9 +232,10 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] py-3 rounded-xl text-lg font-semibold shadow-md hover:opacity-90 transition-colors duration-200 cursor-pointer"
+              disabled={isLoading}
+              className="w-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] py-3 rounded-xl text-lg font-semibold shadow-md hover:opacity-90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              Sign up
+              {isLoading ? "Signing Up ..." : "Sign Up"}
             </button>
           </form>
 

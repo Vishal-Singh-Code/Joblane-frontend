@@ -7,6 +7,8 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import Layout from './components/Layout';
 import HomeRedirect from './components/HomeRedirect';
 import AuthLayout from './components/AuthLayout';
+import VerifyOtp from "./components/VerifyOtp";
+
 // Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -56,6 +58,8 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="/verify-otp" element={<VerifyOtp />} />
+
           </Route>
 
         </Routes>

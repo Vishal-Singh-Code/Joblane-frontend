@@ -87,6 +87,39 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const verifyOtp = async (email, otp) => {
+    try {
+      const res = await axiosInstance.post("/verify-otp/", { email, otp });
+
+      const userData = {
+        id: res.data.id,
+        name: res.data.name,
+        email: res.data.email,
+        role: res.data.role,
+        token: res.data.access,   // use `access` instead of `token`
+        refresh: res.data.refresh,
+      };
+
+      localStorage.setItem("joblaneUser", JSON.stringify(userData));
+      setUser(userData);
+
+      return userData;
+    } catch (err) {
+      throw new Error(err?.response?.data?.error || "OTP verification failed");
+    }
+  };
+
+
+  const resendOtp = async (email) => {
+    try {
+      const res = await axiosInstance.post("/send-otp/", { email });
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.error || "Failed to resend OTP");
+    }
+  };
+
+
   const value = useMemo(
     () => ({
       user,
@@ -95,6 +128,8 @@ const AuthProvider = ({ children }) => {
       logout,
       register,
       googleLogin,
+      verifyOtp,
+      resendOtp,
       setUser,
     }),
     [user, loading]

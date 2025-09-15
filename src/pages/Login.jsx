@@ -171,7 +171,7 @@ const Login = () => {
               disabled={isLoading}
               className="w-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] py-3 rounded-xl text-lg font-semibold shadow hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isLoading ? "Logging In..." : "Log in"}
+              {isLoading ? "Logging In..." : "Log In"}
             </button>
           </form>
 
