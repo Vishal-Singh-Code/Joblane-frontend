@@ -23,7 +23,6 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// Refresh token on 401 errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {

@@ -7,7 +7,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import Layout from './components/Layout';
 import HomeRedirect from './components/HomeRedirect';
 import AuthLayout from './components/AuthLayout';
-import VerifyOtp from "./components/VerifyOtp";
+
 
 // Pages
 import Login from './pages/Login';
@@ -23,6 +23,10 @@ import JobDetails from './pages/jobseeker/JobDetails';
 import ApplicantDetail from './pages/recruiter/ApplicantDetail';
 import JobList from './pages/recruiter/JobList';
 import CompanyProfile from './pages/recruiter/CompanyProfile';
+import VerifyOtp from "./pages/VerifyOtp";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyResetOtp from "./pages/VerifyResetOtp";
 
 function App() {
   return (
@@ -56,10 +60,12 @@ function App() {
           </Route>
 
           <Route element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="/verify-otp" element={<VerifyOtp />} />
-
+            <Route path="verify-otp" element={<VerifyOtp />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword/>}/>
+            <Route path="forgot-password/verify-otp" element={<VerifyResetOtp />} />
+            <Route path="forgot-password/reset" element={<ResetPassword/>}/>
           </Route>
 
         </Routes>

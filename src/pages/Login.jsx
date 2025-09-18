@@ -121,8 +121,6 @@ const Login = () => {
             </Link>
           </p>
 
-
-
           <form onSubmit={handleSubmit} className="space-y-6">
             <input
               type="text"
@@ -153,6 +151,15 @@ const Login = () => {
               </button>
             </div>
 
+            <div className="flex justify-end">
+              <Link
+                to="/forgot-password"
+                className="text-blue-700 hover:underline font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -174,6 +181,7 @@ const Login = () => {
               {isLoading ? "Logging In..." : "Log In"}
             </button>
           </form>
+
 
           <div className="flex items-center my-6">
             <hr className="flex-grow border-[hsl(var(--border))]" />

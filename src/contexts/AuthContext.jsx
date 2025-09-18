@@ -19,6 +19,49 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const register = async (data) => {
+    try {
+      const res = await axiosInstance.post("/register/", data);
+      return res.data;
+    } catch (err) {
+      // Throw the actual backend error object
+      throw err.response?.data || { error: "Registration failed" };
+    }
+  };
+
+  const verifyOtp = async (email, otp) => {
+    try {
+      const res = await axiosInstance.post("/verify-otp/", { email, otp });
+
+      const userData = {
+        id: res.data.id,
+        name: res.data.name,
+        email: res.data.email,
+        role: res.data.role,
+        token: res.data.access,   // use `access` instead of `token`
+        refresh: res.data.refresh,
+      };
+
+      localStorage.setItem("joblaneUser", JSON.stringify(userData));
+      setUser(userData);
+
+      return userData;
+    } catch (err) {
+      const msg = err?.response?.data?.error || err?.response?.data?.non_field_errors?.[0] || err.message || "Something went wrong";
+      throw new Error(msg);
+
+    }
+  };
+
+  const resendOtp = async (email) => {
+    try {
+      const res = await axiosInstance.post("/send-otp/", { email });
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.error || "Failed to resend OTP");
+    }
+  };
+
   const login = async (username, password, rememberMe = false) => {
     const res = await axiosInstance.post("/login/", { username, password });
 
@@ -51,15 +94,6 @@ const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  const register = async (data) => {
-    try {
-      const res = await axiosInstance.post("/register/", data);
-      return res.data;
-    } catch (err) {
-      throw new Error(err?.response?.data?.detail || "Registration failed");
-    }
-  };
-
   const logout = async (redirect = "/login") => {
     try {
       const stored =
@@ -87,35 +121,47 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const verifyOtp = async (email, otp) => {
+  const forgotPassword = async (email) => {
     try {
-      const res = await axiosInstance.post("/verify-otp/", { email, otp });
-
-      const userData = {
-        id: res.data.id,
-        name: res.data.name,
-        email: res.data.email,
-        role: res.data.role,
-        token: res.data.access,   // use `access` instead of `token`
-        refresh: res.data.refresh,
-      };
-
-      localStorage.setItem("joblaneUser", JSON.stringify(userData));
-      setUser(userData);
-
-      return userData;
+      const res = await axiosInstance.post("forgot-password/", { email });
+      return res.data;
     } catch (err) {
-      throw new Error(err?.response?.data?.error || "OTP verification failed");
+      throw new Error(err?.response?.data?.error || "Something went wrong. Try again.");
     }
   };
 
-
-  const resendOtp = async (email) => {
+  const verifyForgotOtp = async (email, otp) => {
+    console.log("Sending payload:", { email, otp });
     try {
-      const res = await axiosInstance.post("/send-otp/", { email });
+      const res = await axiosInstance.post("/forgot-password/verify-otp/", { email, otp });
       return res.data;
     } catch (err) {
-      throw new Error(err?.response?.data?.error || "Failed to resend OTP");
+      console.error("verifyForgotOtp error:", err.response?.data || err.message);
+      throw new Error(
+        err?.response?.data?.error ||
+        err?.response?.data?.non_field_errors?.[0] ||
+        err.message ||
+        "Something went wrong"
+      );
+    }
+  };
+
+  const resendForgotOtp = async (email) => {
+    try {
+      const res = await axiosInstance.post("forgot-password/resend-otp/", { email });
+      return res.data;
+    } catch (err) {
+      const msg = err?.response?.data?.error || err.message;
+      throw new Error(msg);
+    }
+  };
+
+  const resetPassword = async (data) => {
+    try {
+      const res = await axiosInstance.post("forgot-password/reset/", data);
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.error || "Password reset failed");
     }
   };
 
@@ -124,13 +170,17 @@ const AuthProvider = ({ children }) => {
     () => ({
       user,
       loading,
-      login,
-      logout,
+      setUser,
       register,
-      googleLogin,
       verifyOtp,
       resendOtp,
-      setUser,
+      login,
+      logout,
+      googleLogin,
+      forgotPassword,
+      verifyForgotOtp,
+      resendForgotOtp,
+      resetPassword
     }),
     [user, loading]
   );

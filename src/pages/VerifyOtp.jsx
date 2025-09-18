@@ -3,12 +3,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
-const RESEND_COOLDOWN = 30; // seconds
+const RESEND_COOLDOWN = 30;
 
 const VerifyOtp = () => {
   const { verifyOtp, resendOtp } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+
 
   const emailParam = searchParams.get("email"); // get email from query param
   const [otp, setOtp] = useState("");
@@ -33,12 +35,14 @@ const VerifyOtp = () => {
     }
 
     try {
+      setLoading(true);
       const response = await verifyOtp(emailParam, otp);
 
       if (response?.token && response?.refresh) {
         toast.success("OTP verified successfully!");
         navigate("/");
-      } else {
+      }
+      else {
         toast.error("Failed to verify OTP. Try again.");
       }
 
@@ -47,6 +51,8 @@ const VerifyOtp = () => {
       const message = err.message || "OTP verification failed.";
       setError(message);
       toast.error(message);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -67,20 +73,21 @@ const VerifyOtp = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">Verify OTP</h2>
-        <p className="text-gray-600 text-sm mb-6 text-center">
+        <p className="text-gray-600 mb-6 text-center">
           Enter the 6-digit OTP sent to <strong>{emailParam}</strong>
         </p>
 
         <form onSubmit={handleVerify} className="space-y-4">
           <input
-            type="number"
+            type="text"
+            pattern="\d{6}"
             maxLength={6}
             value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            placeholder="Enter OTP"
+            onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            placeholder="Enter 6-digit OTP"
             className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-xl tracking-widest"
             autoFocus
           />
@@ -88,9 +95,10 @@ const VerifyOtp = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:opacity-90 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
           >
-            Verify OTP
+             {loading ? "Verifying OTP..." : "Verify OTP"}
           </button>
         </form>
 

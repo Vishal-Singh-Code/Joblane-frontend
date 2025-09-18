@@ -54,7 +54,9 @@ const Register = () => {
       toast.error("Please fix validation errors.");
       return;
     }
+
     setIsLoading(true);
+
     try {
       const response = await register({
         username: formData.username,
@@ -64,23 +66,36 @@ const Register = () => {
         role,
       });
 
-      // Redirect to OTP page instead of logging in
+      // If registration response has a message (pending OTP)
       if (response?.message) {
-        toast.success(response.message); // "User registered successfully. Please verify OTP."
+        toast.success(response.message); // e.g., "User registered successfully. Please verify OTP."
         navigate(`/verify-otp?email=${formData.email}`);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
 
     } catch (err) {
-      console.error(err);
-      const errorMessage = err.response?.data?.error || err.message || "Registration failed.";
-      setError(errorMessage);
-      toast.error(errorMessage);
+      if (err.username) {
+        setError(err.username[0]);
+        toast.error(err.username[0]);
+      } else if (err.email) {
+        setError(err.email[0]);
+        toast.error(err.email[0]);
+        navigate('/login');
+      } else if (err.error) {
+        setError(err.error);
+        toast.error(err.error);
+      } else {
+        setError("Registration failed.");
+        toast.error("Registration failed.");
+      }
+
+
     } finally {
       setIsLoading(false);
     }
   };
+
 
 
 
