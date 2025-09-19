@@ -123,7 +123,7 @@ const AuthProvider = ({ children }) => {
 
   const forgotPassword = async (email) => {
     try {
-      const res = await axiosInstance.post("forgot-password/", { email });
+      const res = await axiosInstance.post("/forgot-password/", { email });
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.error || "Something went wrong. Try again.");
@@ -148,7 +148,7 @@ const AuthProvider = ({ children }) => {
 
   const resendForgotOtp = async (email) => {
     try {
-      const res = await axiosInstance.post("forgot-password/resend-otp/", { email });
+      const res = await axiosInstance.post("/forgot-password/resend-otp/", { email });
       return res.data;
     } catch (err) {
       const msg = err?.response?.data?.error || err.message;
@@ -158,7 +158,7 @@ const AuthProvider = ({ children }) => {
 
   const resetPassword = async (data) => {
     try {
-      const res = await axiosInstance.post("forgot-password/reset/", data);
+      const res = await axiosInstance.post("/forgot-password/reset/", data);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.error || "Password reset failed");
