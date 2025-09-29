@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import axiosInstance from "../api/axios";
 import axios from "axios";
-import { forgotPassword as forgotPasswordAPI } from "../api/axios"; // Import the public function
-
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -123,16 +121,14 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-
-const forgotPassword = async (email) => {
-  try {
-    const res = await forgotPasswordAPI(email);
-    return res;
-  } catch (err) {
-    throw new Error(err?.message || "Something went wrong. Try again.");
-  }
-};
-
+  const forgotPassword = async (email) => {
+    try {
+      const res = await axiosInstance.post("/forgot-password/", { email });
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.error || "Something went wrong. Try again.");
+    }
+  };
 
   const verifyForgotOtp = async (email, otp) => {
     console.log("Sending payload:", { email, otp });
