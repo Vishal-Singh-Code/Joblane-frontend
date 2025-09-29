@@ -72,4 +72,18 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+export const forgotPassword = async (email) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/auth/forgot-password/`,
+      { email },
+      { headers: { "Content-Type": "application/json" } } // no auth
+    );
+    return res.data;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || "Something went wrong. Try again.");
+  }
+};
+
+
 export default axiosInstance;

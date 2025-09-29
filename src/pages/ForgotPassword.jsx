@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 
+
 const ForgotPassword = () => {
   const { forgotPassword } = useAuth()
   const [email, setEmail] = useState("");
