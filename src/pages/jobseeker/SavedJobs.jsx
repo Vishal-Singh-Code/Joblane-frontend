@@ -80,8 +80,8 @@ function SavedJobs() {
                 {/* Company Logo */}
                 <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 ">
                   <img
-                    src={job.logo_url || `https://logo.clearbit.com/${job.company?.toLowerCase().replace(/\s+/g, '')}.com`}
-                    alt={`${job.company} Logo`}
+                    src={job.company_logo|| `https://logo.clearbit.com/${job.company?.toLowerCase().replace(/\s+/g, '')}.com`}
+                    alt={`${job.company_name} Logo`}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -96,7 +96,7 @@ function SavedJobs() {
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm sm:text-base text-gray-500 flex items-center gap-1">
-                      <Briefcase className="w-4 h-4" /> {job.company}
+                      <Briefcase className="w-4 h-4" /> {job.company_name}
                     </p>
                     <span
                       className={`text-xs font-medium px-3 py-1 rounded-full ${isOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'

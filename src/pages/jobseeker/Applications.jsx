@@ -62,8 +62,8 @@ function Applications() {
                 {/* Logo */}
                 <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg bg-muted overflow-hidden flex-shrink-0">
                   <img
-                    src={job.logo_url || 'https://via.placeholder.com/40'}
-                    alt={`${job.company} logo`}
+                    src={job.company_logo || 'https://via.placeholder.com/40'}
+                    alt={`${job.company_name} logo`}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -74,7 +74,7 @@ function Applications() {
                     {job.title}
                   </h2>
                   <p className="text-sm sm:text-base text-gray-500 flex items-center gap-1">
-                    <Briefcase className="w-4 h-4" /> {job.company}
+                    <Briefcase className="w-4 h-4" /> {job.company_name}
                   </p>
 
                   <div className="flex flex-wrap gap-2 mt-1 text-xs sm:text-xs pt-2">

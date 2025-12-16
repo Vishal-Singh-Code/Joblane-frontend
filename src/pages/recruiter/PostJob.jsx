@@ -1,122 +1,129 @@
-import { useState, useEffect } from 'react';
-import axiosJob from '../../api/axiosJob';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from "react";
+import axiosJob from "../../api/axiosJob";
+import { toast } from "react-toastify";
 
 const JOB_TYPE_CHOICES = ["Internship", "Part-time", "Full-time", "Hybrid"];
 
 function PostJob() {
-  const savedCompany = JSON.parse(localStorage.getItem("joblaneCompany") || "{}");
-  const isCompanySet = savedCompany.company && savedCompany.logo_url;
+  const [hasCompany, setHasCompany] = useState(null); // null = loading
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    title: '',
-    company: '',
-    location: '',
-    ctc: '',
-    experience: '',
-    deadline: '',
-    job_type: '',
-    logo_url: '',
-    description: '',
-    responsibilities: [''],
-    requirements: [''],
-    skills: [''],
-    perks: [''],
+    title: "",
+    location: "",
+    ctc: "",
+    experience: "",
+    deadline: "",
+    job_type: "",
+    description: "",
+    responsibilities: [""],
+    requirements: [""],
+    skills: [""],
+    perks: [""],
   });
 
+  /* 🔍 CHECK COMPANY PROFILE (BACKEND SOURCE OF TRUTH) */
   useEffect(() => {
-    const savedCompany = JSON.parse(localStorage.getItem("joblaneCompany") || "{}");
+    const checkCompany = async () => {
+      try {
+        const res = await axiosJob.get("/recruiter/company/");
+        setHasCompany(!!res.data?.id);
+      } catch (error) {
+        setHasCompany(false);
+      }
+    };
 
-    if (savedCompany.company && savedCompany.logo_url) {
-      setFormData((prev) => ({
-        ...prev,
-        company: savedCompany.company,
-        logo_url: savedCompany.logo_url,
-      }));
-    }
+    checkCompany();
   }, []);
 
+  /* BASIC FIELD CHANGE */
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === 'company') {
-      setFormData({
-        ...formData,
-        company: value,
-        logo_url: `https://logo.clearbit.com/${value.toLowerCase()}.com`,
-      });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  /* ARRAY FIELD HANDLERS */
   const handleArrayChange = (field, index, value) => {
     const copy = [...formData[field]];
     copy[index] = value;
-    setFormData({ ...formData, [field]: copy });
+    setFormData((prev) => ({ ...prev, [field]: copy }));
   };
 
   const addArrayField = (field) =>
-    setFormData({ ...formData, [field]: [...formData[field], ''] });
+    setFormData((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
 
-  const removeArrayField = (field, index) => {
-    const copy = formData[field].filter((_, i) => i !== index);
-    setFormData({ ...formData, [field]: copy });
-  };
+  const removeArrayField = (field, index) =>
+    setFormData((prev) => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index),
+    }));
 
+  /* SUBMIT */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isCompanySet) {
-      toast.error("Company details missing. Please set your company profile first.");
+    if (!formData.title || !formData.location || !formData.job_type) {
+      toast.error("Please fill all required fields.");
       return;
     }
 
-    if (!formData.title || !formData.company || !formData.location || !formData.job_type) {
-      toast.error('Please fill in all required fields.');
-      return;
-    }
-
-    const loadingToast = toast.loading('Posting job...');
+    setLoading(true);
+    const toastId = toast.loading("Posting job...");
 
     try {
-      await axiosJob.post('/recruiter/jobs/', formData);
+      await axiosJob.post("/recruiter/jobs/", formData);
 
-      toast.update(loadingToast, {
-        render: 'Job posted successfully!',
-        type: 'success',
+      toast.update(toastId, {
+        render: "Job posted successfully!",
+        type: "success",
         isLoading: false,
         autoClose: 3000,
       });
 
-      // Reset the form
       setFormData({
-        title: '',
-        company: '',
-        location: '',
-        ctc: '',
-        experience: '',
-        deadline: '',
-        job_type: '',
-        logo_url: '',
-        description: '',
-        responsibilities: [''],
-        requirements: [''],
-        skills: [''],
-        perks: [''],
+        title: "",
+        location: "",
+        ctc: "",
+        experience: "",
+        deadline: "",
+        job_type: "",
+        description: "",
+        responsibilities: [""],
+        requirements: [""],
+        skills: [""],
+        perks: [""],
       });
     } catch (error) {
-      console.error("Full error:", error.response?.data || error.message);
-      const errorMessage =
-        error.response?.data?.error || 'Failed to post job. Please try again.';
-      toast.update(loadingToast, {
-        render: errorMessage,
-        type: 'error',
+      toast.update(toastId, {
+        render: "Failed to post job.",
+        type: "error",
         isLoading: false,
         autoClose: 3000,
       });
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  /* ⏳ LOADING STATE */
+  if (hasCompany === null) {
+    return (
+      <div className="text-center mt-20 text-lg font-semibold">
+        Checking company profile...
+      </div>
+    );
+  }
+
+  /* 🚫 NO COMPANY PROFILE */
+  if (!hasCompany) {
+    return (
+      <div className="text-center mt-20 text-red-600 text-lg font-semibold">
+        Please set your company details in your profile before posting a job.
+      </div>
+    );
+  }
+
 
   return (
     <div className="text-left min-h-screen bg-gray-50 flex items-start justify-center py-10 px-4">
@@ -124,15 +131,7 @@ function PostJob() {
 
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 text-center">Post New Job</h1>
 
-        {!isCompanySet ? (
-          <div className="text-center text-red-600 text-lg font-semibold">
-            Please set your company details in your profile before posting a job.
-            <br />
-          </div>
-        ) : (
           <form onSubmit={handleSubmit} className="space-y-8">
-            <input type="hidden" name="company" value={formData.company} />
-            <input type="hidden" name="logo_url" value={formData.logo_url} />
             {/* BASIC INFO */}
             <section>
               <h2 className="text-xl font-semibold mb-4 text-indigo-600 border-b pb-2">Basic Information</h2>
@@ -152,7 +151,7 @@ function PostJob() {
                       value={formData[name]}
                       onChange={handleChange}
                       placeholder={placeholder}
-                      required={['company', 'title', 'deadline'].includes(name)}
+                      required={['title', 'deadline'].includes(name)}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                     />
 
@@ -237,7 +236,7 @@ function PostJob() {
             </button>
 
           </form>
-        )}
+
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ const JobList = () => {
   const filteredJobs = jobs
     .filter((job) =>
       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.location.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
@@ -116,7 +116,7 @@ const JobList = () => {
                 </div>
 
                 <p className="text-muted-foreground text-sm mb-4 flex items-center gap-1">
-                  <Briefcase className="w-4 h-4" /> {job.company}
+                  <Briefcase className="w-4 h-4" /> {job.company_name}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-2 justify-between text-xs sm:text-sm text-gray-600">

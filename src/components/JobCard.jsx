@@ -2,15 +2,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const JobCard = ({ job }) => {
-  const getCompanyLogoUrl = (companyName) => {
-    const sanitizedCompanyName = companyName.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const clearbitUrl = `https://logo.clearbit.com/${sanitizedCompanyName}.com?size=48`;
-    return sanitizedCompanyName.length < 2
-      ? "https://via.placeholder.com/40?text=🏢"
-      : clearbitUrl;
-  };
 
-  const logoUrl = getCompanyLogoUrl(job.company);
+  const logoUrl = job.company_logo || "https://placehold.co/64x64?text=🏢";
 
   return (
     <Link to={`/job/${job.id}`} className="block hover:no-underline">
@@ -23,18 +16,19 @@ const JobCard = ({ job }) => {
               {job.title}
             </h3>
             <p className=" text-md sm:text-lg text-foreground opacity-70">
-              {job.company}
+              {job.company_name}
             </p>
           </div>
+          
           <img
-            src={logoUrl || "https://placehold.co/40x40?text=🏢"}
-            alt={`${job.company} Logo`}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://placehold.co/40x40?text=🏢";
-            }}
-            className="w-10 h-10 sm:w-12 sm:h-12 object-contain flex-shrink-0 rounded"
-          />
+          src={logoUrl}
+          alt={`${job.company_name} Logo`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://placehold.co/64x64?text=🏢";
+          }}
+          className="w-14 h-14 object-contain rounded bg-white p-1 flex-shrink-0"
+        />
 
         </div>
 

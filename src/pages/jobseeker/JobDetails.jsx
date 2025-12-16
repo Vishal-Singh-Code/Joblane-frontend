@@ -96,12 +96,12 @@ function JobDetails() {
                             {job.title}
                         </h1>
                         <p className="text-md sm:text-xl text-foreground opacity-70 mt-1">
-                            {job.company} - {job.location}
+                            {job.company_name} - {job.location}
                         </p>
                     </div>
                     <img
-                        src={job.logo_url}
-                        alt={`${job.company} Logo`}
+                        src={job.company_logo}
+                        alt={`${job.company_name} Logo`}
                         className="w-16 h-16 object-contain rounded-md bg-background p-2"
                     />
                 </div>

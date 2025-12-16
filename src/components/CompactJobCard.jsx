@@ -1,7 +1,8 @@
 import { MapPin, IndianRupee, Briefcase, User } from "lucide-react";
 
 const CompactJobCard = ({ job }) => {
-  const logoUrl = `https://logo.clearbit.com/${job.company.toLowerCase()}.com?size=48`;
+  const logoUrl = job.company_logo || "https://placehold.co/64x64?text=🏢";
+
 
   return (
       <div className="bg-card p-6 rounded-2xl border border-border shadow group hover:shadow-xl hover:scale-[1.015] transition-all duration-300 h-full flex flex-col gap-4 cursor-pointer">
@@ -12,18 +13,19 @@ const CompactJobCard = ({ job }) => {
             <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
               {job.title}
             </h3>
-            <p className="text-base text-muted-foreground">{job.company}</p>
+            <p className="text-base text-muted-foreground">{job.company_name}</p>
           </div>
 
-          <img
-            src={logoUrl || "https://placehold.co/64x64?text=🏢"}
-            alt={`${job.company} Logo`}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://placehold.co/64x64?text=🏢";
-            }}
-            className="w-14 h-14 object-contain rounded bg-white p-1 flex-shrink-0"
-          />
+         <img
+          src={logoUrl}
+          alt={`${job.company_name} Logo`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://placehold.co/64x64?text=🏢";
+          }}
+          className="w-14 h-14 object-contain rounded bg-white p-1 flex-shrink-0"
+        />
+
         </div>
 
         {/* Tags */}

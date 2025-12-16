@@ -1,52 +1,56 @@
 import { useState } from "react";
+import axiosJob from "../../api/axiosJob"
+import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function CompanyProfile() {
   const [formData, setFormData] = useState({
-    company_name: "",
-    logo_url: "",
+    name: "",
+    logo: null,
   });
 
-  const [isLogoLoading, setIsLogoLoading] = useState(false);
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
 
-    if (name === "company_name") {
-      const domain = value.trim().toLowerCase();
-      const fullDomain = domain.endsWith(".com") ? domain : `${domain}.com`;
-
-      setIsLogoLoading(!!domain);
-
-      setFormData({
-        ...formData,
-        company_name: value,
-        logo_url: `https://logo.clearbit.com/${fullDomain}`,
-      });
+    if (name === "logo") {
+      setFormData((prev) => ({
+        ...prev,
+        logo: files[0],
+      }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Save in localStorage only
-    localStorage.setItem(
-      "joblaneCompany",
-      JSON.stringify({
-        company: formData.company_name,
-        logo_url: formData.logo_url,
-      })
-    );
+    if (!formData.logo) {
+      toast.error("Please upload company logo");
+      return;
+    }
 
-    toast.success("Company profile saved locally!");
+    try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("logo", formData.logo);
 
-    setFormData({
-      company_name: "",
-      logo_url: "",
-    });
+      await axiosJob.put("/recruiter/company/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      toast.success("Company profile saved successfully!");
+    } catch (error) {
+      toast.error("Failed to save company profile");
+      console.error(error);
+    }
+
   };
 
   return (
@@ -54,41 +58,40 @@ function CompanyProfile() {
       onSubmit={handleSubmit}
       className="bg-background border border-gray space-y-4 max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow"
     >
-      <label
-        htmlFor="company_name"
-        className="block text-sm sm:text-lg  font-medium text-gray-700"
-      >
-        Company Name:
+      {/* Company Name */}
+      <label className="block text-sm sm:text-lg font-medium text-gray-700">
+        Company Name
       </label>
       <input
         type="text"
-        name="company_name"
-        id="company_name"
+        name="name"
+        value={formData.name}
         onChange={handleChange}
-        value={formData.company_name}
         className="w-full px-3 py-2 border rounded-md"
-        placeholder="e.g., google"
+        placeholder="e.g., Google"
         required
       />
 
-      {formData.logo_url && (
-        <div className="mt-2">
-          {isLogoLoading && (
-            <p className="text-sm text-gray-400">Loading logo...</p>
-          )}
-          <img
-            key={formData.logo_url}
-            src={formData.logo_url}
-            alt="Company Logo"
-            className="h-10"
-            onLoad={() => setIsLogoLoading(false)}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/default-logo.png";
-              setIsLogoLoading(false);
-            }}
-          />
-        </div>
+      {/* Logo Upload */}
+      <label className="block text-sm sm:text-lg font-medium text-gray-700">
+        Company Logo
+      </label>
+      <input
+        type="file"
+        name="logo"
+        accept="image/*"
+        onChange={handleChange}
+        className="w-full"
+        required
+      />
+
+      {/* Preview */}
+      {formData.logo && (
+        <img
+          src={URL.createObjectURL(formData.logo)}
+          alt="Logo Preview"
+          className="h-14 object-contain mt-2"
+        />
       )}
 
       <button
