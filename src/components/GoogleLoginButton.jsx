@@ -10,16 +10,18 @@ const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
+
     onSuccess: async (tokenResponse) => {
       const loadingToast = toast.loading("Signing you in...");
+      console.log("Google tokenResponse:", tokenResponse);
+      console.log("authorization code:", tokenResponse.code);
 
       try {
-        const access_token = tokenResponse.access_token;
-        const response = await axios.post("/google/", { access_token });
+        const code = tokenResponse.code;
+        const response = await axios.post("/google/", { code: code });
 
-
-        const { access, refresh, role } = response.data;
-        googleLogin(access, refresh, role);
+        const { access, refresh, role, id, email, name } = response.data;
+        googleLogin(access, refresh, role, id, email, name);
 
         toast.update(loadingToast, { render: "Login successful!", type: "success", isLoading: false, autoClose: 3000 });
         navigate('/');
@@ -34,7 +36,7 @@ const GoogleLoginButton = () => {
       }
     },
 
-    flow: 'implicit',
+    flow: 'auth-code',
   });
 
   return (

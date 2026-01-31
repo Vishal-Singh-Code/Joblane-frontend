@@ -13,8 +13,8 @@ axiosJob.interceptors.request.use((config) => {
   const user =
     JSON.parse(localStorage.getItem("joblaneUser")) ||
     JSON.parse(sessionStorage.getItem("joblaneUser"));
-  if (user?.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
+  if (user?.access) {
+    config.headers.Authorization = `Bearer ${user.access}`;
   }
   return config;
 });
@@ -40,7 +40,7 @@ axiosJob.interceptors.response.use(
           });
 
           const newAccess = res.data.access;
-          const updatedUser = { ...user, token: newAccess };
+          const updatedUser = { ...user, access: newAccess };
 
           // Store updated token in the same storage the user came from
           if (localStorage.getItem("joblaneUser")) {

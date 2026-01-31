@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
         name: res.data.name,
         email: res.data.email,
         role: res.data.role,
-        token: res.data.access,   // use `access` instead of `token`
+        access: res.data.access,
         refresh: res.data.refresh,
       };
 
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }) => {
       name: res.data.name,
       email: res.data.email,
       role: res.data.role,
-      token: res.data.token,
+      access: res.data.access,
       refresh: res.data.refresh,
     };
 
@@ -86,40 +86,54 @@ const AuthProvider = ({ children }) => {
       id,
       name,
       email,
-      token: accessToken,
+      access: accessToken,
       refresh: refreshToken,
       role,
     };
-    localStorage.setItem("joblaneUser", JSON.stringify(userData));
+    if (accessToken && refreshToken) {
+      localStorage.setItem("joblaneUser", JSON.stringify(userData));
+    }
+
     setUser(userData);
   };
 
-  const logout = async (redirect = "/login") => {
-    try {
-      const stored =
-        localStorage.getItem("joblaneUser") ||
-        sessionStorage.getItem("joblaneUser");
-      const parsed = stored && JSON.parse(stored);
+  // const logout = async (redirect = "/login") => {
+  //   try {
+  //     const stored =
+  //       localStorage.getItem("joblaneUser") ||
+  //       sessionStorage.getItem("joblaneUser");
+  //     const parsed = stored && JSON.parse(stored);
 
-      if (parsed?.refresh) {
-        await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/logout/`, {
-          refresh_token: parsed.refresh,
-        },
-          {
-            headers: {
-              Authorization: `Bearer ${parsed.token}`,
-            }
-          });
-      }
-    } catch (err) {
-      console.warn("Token revoke failed:", err?.response?.data || err.message);
-    } finally {
-      localStorage.removeItem("joblaneUser");
-      sessionStorage.removeItem("joblaneUser");
-      setUser(null);
-      if (redirect) window.location.href = redirect;
-    }
+  //     if (parsed?.refresh) {
+  //       await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/logout/`, {
+  //         refresh_token: parsed.refresh,
+  //       },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${parsed.access}`,
+  //           }
+  //         });
+  //     }
+  //   } catch (err) {
+  //     console.warn("Token revoke failed:", err?.response?.data || err.message);
+  //   } finally {
+  //     localStorage.removeItem("joblaneUser");
+  //     sessionStorage.removeItem("joblaneUser");
+  //     setUser(null);
+  //     if (redirect) window.location.href = redirect;
+  //   }
+  // };
+
+  const logout = (redirect = "/login") => {
+    // 1️⃣ IMMEDIATE UI ACTION (user feels instant logout)
+    localStorage.removeItem("joblaneUser");
+    sessionStorage.removeItem("joblaneUser");
+    setUser(null);
+
+    if (redirect) window.location.href = redirect;
+
   };
+
 
   const forgotPassword = async (email) => {
     try {
@@ -148,7 +162,7 @@ const AuthProvider = ({ children }) => {
 
   const resendForgotOtp = async (email) => {
     try {
-      const res = await axiosInstance.post("/forgot-password/resend-otp/", { email });
+      const res = await axiosInstance.post("/forgot-password/", { email });
       return res.data;
     } catch (err) {
       const msg = err?.response?.data?.error || err.message;

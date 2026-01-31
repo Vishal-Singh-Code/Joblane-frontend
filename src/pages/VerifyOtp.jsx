@@ -38,7 +38,7 @@ const VerifyOtp = () => {
       setLoading(true);
       const response = await verifyOtp(emailParam, otp);
 
-      if (response?.token && response?.refresh) {
+      if (response?.access && response?.refresh) {
         toast.success("OTP verified successfully!");
         navigate("/");
       }

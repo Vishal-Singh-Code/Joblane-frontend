@@ -17,8 +17,8 @@ axiosInstance.interceptors.request.use((config) => {
     : storedSession
     ? JSON.parse(storedSession)
     : null;
-  if (user?.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
+  if (user?.access) {
+    config.headers.Authorization = `Bearer ${user.access}`;
   }
   return config;
 });
