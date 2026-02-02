@@ -109,7 +109,7 @@ function LandingPage() {
             <div className="mt-5 flex items-center gap-4 text-left">
               <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rohit" className="w-12 h-12 rounded-full object-cover" />
               <div>
-                <p className="font-bold text-gray-800">Rohit Verma</p>
+                <p className="font-bold text-gray-800">Parth Singh</p>
                 <p className="text-sm text-gray-500">Placed at Infosys</p>
               </div>
             </div>

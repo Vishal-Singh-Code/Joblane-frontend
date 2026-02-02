@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
-  const { register, googleLogin } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [role, setRole] = useState("jobseeker");
@@ -24,29 +24,45 @@ const Register = () => {
     password: "",
   });
 
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % landingImg.length);
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
+
   const validateForm = () => {
     const { username, password } = formData;
-    const usernameRegex = /^[A-Za-z_]+$/;
+
+    const usernameRegex = /^[A-Za-z0-9_]+$/;
     if (!usernameRegex.test(username)) {
-      setError("Username can only contain letters and underscores.");
+      setError("Username can only contain letters, numbers, and underscores.");
       return false;
     }
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
       setError("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.");
       return false;
     }
+
     return true;
   };
 
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+
   const handleSubmit = async (e) => {
+    if (isLoading) return;
+
     e.preventDefault();
     setError("");
 
@@ -56,15 +72,17 @@ const Register = () => {
     }
 
     setIsLoading(true);
+    const payload = {
+      username: formData.username.trim(),
+      email: formData.email.trim(),
+      password: formData.password,
+      name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
+      role,
+    };
+
 
     try {
-      const response = await register({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        name: `${formData.firstName} ${formData.lastName}`,
-        role,
-      });
+      const response = await register(payload)
 
       // If registration response has a message (pending OTP)
       if (response?.message) {
@@ -75,28 +93,23 @@ const Register = () => {
       }
 
     } catch (err) {
-      if (err.username) {
-        setError(err.username[0]);
-        toast.error(err.username[0]);
-      } else if (err.email) {
-        setError(err.email[0]);
-        toast.error(err.email[0]);
-        navigate('/login');
-      } else if (err.error) {
-        setError(err.error);
-        toast.error(err.error);
-      } else {
-        setError("Registration failed.");
-        toast.error("Registration failed.");
-      }
+      const data = err?.response?.data;
 
+      const message =
+        data?.username?.[0] ||
+        data?.email?.[0] ||
+        data?.error ||
+        data?.detail ||
+        "Registration failed.";
 
+      setError(message);
+      toast.error(message);
+
+      if (data?.email) { navigate("/login"); }
     } finally {
       setIsLoading(false);
     }
   };
-
-
 
 
   return (
@@ -171,7 +184,7 @@ const Register = () => {
               name="username"
               value={formData.username}
               placeholder="Username"
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={handleChange}
               className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
               autoComplete="off"
               required
@@ -183,7 +196,7 @@ const Register = () => {
                 name="firstName"
                 value={formData.firstName}
                 placeholder="First name"
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={handleChange}
                 className="bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
                 autoComplete="off"
                 required
@@ -193,7 +206,7 @@ const Register = () => {
                 name="lastName"
                 value={formData.lastName}
                 placeholder="Last name"
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={handleChange}
                 className="bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
                 autoComplete="off"
               />
@@ -204,7 +217,7 @@ const Register = () => {
               name="email"
               value={formData.email}
               placeholder="Email"
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={handleChange}
               className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
               autoComplete="off"
               required
@@ -216,8 +229,9 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 placeholder="Enter your password"
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={handleChange}
                 className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 pr-12 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                required
               />
               <button
                 type="button"
@@ -264,6 +278,7 @@ const Register = () => {
 
       </div>
     </div>
+    
   );
 };
 

@@ -12,7 +12,7 @@ function JobSeekerHome() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [approvedCount, setApprovedCount] = useState(0);
-  const [userName, setUserName] = useState("User"); 
+  const [userName, setUserName] = useState("User");
 
   const shuffleArray = (array) => {
     return array
@@ -80,7 +80,7 @@ function JobSeekerHome() {
         <h2 className="section-heading text-2xl sm:text-3xl">Recommended Jobs</h2>
         <p className="text-muted-foreground mb-10 text-base sm:text-lg">As per your preference</p>
 
-        {loading && <CompactJobCardSkeleton/>}
+        {loading && <CompactJobCardSkeleton />}
         {error && <p className="text-red-500">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -94,14 +94,14 @@ function JobSeekerHome() {
             </Link>
           ))}
         </div>
-         <div className="mt-10 text-center">
-        <Link
-          to="/jobs"
-          className="more-button"
-        >
-          Explore All Jobs
-        </Link>
-      </div>
+        <div className="mt-10 text-center">
+          <Link
+            to="/jobs"
+            className="more-button"
+          >
+            Explore All Jobs
+          </Link>
+        </div>
 
       </section>
 
@@ -120,9 +120,6 @@ function JobSeekerHome() {
           <p className="text-gray-600">Interview Invites</p>
         </div>
       </section>
-
-      {/* CTA Button */}
-     
 
     </div>
   );

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { EyeIcon, EyeOffIcon } from '../components/icons/PasswordIcons';
 import { useAuth } from "../contexts/AuthContext";

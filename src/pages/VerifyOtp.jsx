@@ -11,19 +11,33 @@ const VerifyOtp = () => {
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
 
-
-  const emailParam = searchParams.get("email"); // get email from query param
+  const email = searchParams.get("email");
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
 
+
   useEffect(() => {
-    let timer;
-    if (resendCooldown > 0) {
-      timer = setInterval(() => setResendCooldown((prev) => prev - 1), 1000);
+    if (!email) {
+      toast.error("Invalid verification link.");
+      navigate("/register");
+      return;
     }
+
+    setResendCooldown(RESEND_COOLDOWN);
+  }, [email, navigate]);
+
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setResendCooldown((prev) => prev - 1);
+    }, 1000);
+
     return () => clearInterval(timer);
   }, [resendCooldown]);
+
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -36,7 +50,7 @@ const VerifyOtp = () => {
 
     try {
       setLoading(true);
-      const response = await verifyOtp(emailParam, otp);
+      const response = await verifyOtp(email, otp);
 
       if (response?.access && response?.refresh) {
         toast.success("OTP verified successfully!");
@@ -51,16 +65,17 @@ const VerifyOtp = () => {
       const message = err.message || "OTP verification failed.";
       setError(message);
       toast.error(message);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
 
+
   const handleResend = async () => {
-    if (resendCooldown > 0) return;
+    if (resendCooldown > 0 || loading) return;
 
     try {
-      const response = await resendOtp(emailParam);
+      const response = await resendOtp(email);
       toast.success(response.message || "OTP resent successfully!");
       setOtp(""); // clear input
       setResendCooldown(RESEND_COOLDOWN);
@@ -77,7 +92,7 @@ const VerifyOtp = () => {
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">Verify OTP</h2>
         <p className="text-gray-600 mb-6 text-center">
-          Enter the 6-digit OTP sent to <strong>{emailParam}</strong>
+          Enter the 6-digit OTP sent to <strong>{email}</strong>
         </p>
 
         <form onSubmit={handleVerify} className="space-y-4">
@@ -98,14 +113,14 @@ const VerifyOtp = () => {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
           >
-             {loading ? "Verifying OTP..." : "Verify OTP"}
+            {loading ? "Verifying OTP..." : "Verify OTP"}
           </button>
         </form>
 
         <div className="mt-4 text-center">
           <button
             onClick={handleResend}
-            disabled={resendCooldown > 0}
+            disabled={resendCooldown > 0 || loading}
             className={`text-blue-600 font-medium ${resendCooldown > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {resendCooldown > 0
@@ -113,6 +128,7 @@ const VerifyOtp = () => {
               : "Resend OTP"}
           </button>
         </div>
+        
       </div>
     </div>
   );

@@ -14,12 +14,10 @@ const ForgotPassword = () => {
 
     try {
       setLoading(true);
-      await forgotPassword(email); // Use the new function
-
+      await forgotPassword(email);
       toast.success("OTP sent to your email");
       navigate("/forgot-password/verify-otp", { state: { email } });
     } catch (error) {
-      // The error.message will be the string we set in the function
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -51,6 +49,7 @@ const ForgotPassword = () => {
             {loading ? "Sending OTP..." : "Send OTP"}
           </button>
         </form>
+        
       </div>
     </div>
   );

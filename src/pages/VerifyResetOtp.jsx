@@ -6,24 +6,34 @@ import { toast } from "react-toastify";
 const RESEND_COOLDOWN = 30;
 
 const VerifyResetOtp = () => {
-  const { verifyForgotOtp, resendForgotOtp } = useAuth();
+  const { verifyForgotOtp, forgotPassword } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-
 
   const email = location.state?.email;
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [cooldown, setCooldown] = useState(0);
 
-  // countdown timer for resend
+
+  useEffect(() => {
+    if (!email) {
+      toast.error("Invalid or expired reset link.");
+      navigate("/forgot-password");
+      return;
+    }
+
+    setCooldown(RESEND_COOLDOWN);
+  }, [email, navigate]);
+
   useEffect(() => {
     if (cooldown > 0) {
       const timer = setInterval(() => setCooldown((c) => c - 1), 1000);
       return () => clearInterval(timer);
     }
   }, [cooldown]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,9 +59,11 @@ const VerifyResetOtp = () => {
     }
   };
 
+
   const handleResend = async () => {
+    if (cooldown > 0 || loading) return;
     try {
-      await resendForgotOtp(email);
+      await forgotPassword(email);
       toast.success("OTP resent successfully!");
       setCooldown(RESEND_COOLDOWN);
     } catch (err) {
@@ -100,12 +112,14 @@ const VerifyResetOtp = () => {
           ) : (
             <button
               onClick={handleResend}
+              disabled={cooldown > 0 || loading}
               className="text-blue-600 font-medium"
             >
               Resend OTP
             </button>
           )}
         </div>
+
       </div>
     </div>
   );

@@ -25,67 +25,75 @@ function JobSearch() {
   // mobile filters
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  
+
   // pagination and loader
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
 
-  const jobsPerPage = 4;
+
+
+
 
   // fetch jobs
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await axiosJob.get('/jobs')
-        setJobs(res.data.results)
-      } catch (err) {
-        console.error('Failed to fetch jobs', err);
-      } finally {
-        setLoading(false);
+  const fetchJobs = async () => {
+    setLoading(true);
+
+    try {
+      const params = { page: currentPage };
+
+      if (searchQuery.trim()) {
+        params.search = searchQuery.trim();
       }
 
+      if (profileFilter.length > 0) {
+        params.profile = profileFilter.join(",");
+      }
+
+      if (locationFilter.length > 0) {
+        params.location = locationFilter.join(",");
+      }
+
+      if (experienceFilter) {
+        params.experience = experienceFilter;
+      }
+
+      if (jobTypeFilter.length > 0) {
+        params.job_type = jobTypeFilter.join(",");
+      }
+
+      const res = await axiosJob.get("/jobs", { params });
+
+      setJobs(res.data.results);
+      setCount(res.data.count);
+
+    } catch (err) {
+      console.error("Failed to fetch jobs", err);
+    } finally {
+      setLoading(false);
     }
-    fetchJobs()
-  }, [])
+  };
+
+  fetchJobs();
+}, [
+  currentPage,
+  searchQuery,
+  profileFilter,
+  locationFilter,
+  experienceFilter,
+  jobTypeFilter,
+]);
 
   // refresh page after each change
   useEffect(() => {
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [searchQuery, profileFilter, locationFilter, experienceFilter, jobTypeFilter]);
 
-  const filteredJobs = jobs.filter(job => {
-    const matchesSearch =
-      searchQuery === '' ||
-      job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.location.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesProfile =
-      profileFilter.length === 0 ||
-      profileFilter.some(role => job.title.toLowerCase().includes(role.toLowerCase()));
+  const pageSize = jobs.length || 1;
+  const totalPages = Math.ceil(count / pageSize);
 
-    const matchesLocation =
-      locationFilter.length === 0 ||
-      locationFilter.some(loc => job.location.toLowerCase().includes(loc.toLowerCase()));
-
-    console.log(job)
-    const matchesExperience =
-      experienceFilter === '' ||
-      (experienceFilter === 'Fresher' && parseInt(job.experience) === 0) ||
-      (experienceFilter === 'Experienced' && parseInt(job.experience.trim()[0]) > 0);
-
-    const matchesJobType =
-      jobTypeFilter.length === 0 ||
-      jobTypeFilter.includes(job.job_type);
-
-    return matchesSearch && matchesProfile && matchesLocation && matchesExperience && matchesJobType;
-  });
-
-  // pagination 
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   const commonFilterProps = {
     profileSearch,
@@ -141,7 +149,7 @@ function JobSearch() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="section-heading mb-2">
-          {filteredJobs.length} Job{filteredJobs.length !== 1 && 's'} Found
+          {count} Job{count !== 1 && 's'} Found
         </h1>
         <p className="text-muted-foreground text-sm sm:text-lg text-center">Search and Apply to Latest Job Vacancies & Openings in India</p>
       </div>
@@ -154,15 +162,15 @@ function JobSearch() {
 
         <main className="flex-1 space-y-6 md:px-8">
           {loading ? (
-            <JobCardSkeleton/>
+            <JobCardSkeleton />
           ) : (
             <>
-              {currentJobs.length === 0 ? (
+              {jobs.length === 0 ? (
                 <p className="text-center text-gray-500">
                   No jobs found. Try adjusting your filters or search query.
                 </p>
               ) : (
-                currentJobs.map((job) => (
+                jobs.map((job) => (
                   <div key={job.id} className="block hover:no-underline">
                     <JobCard job={job} />
                   </div>
@@ -185,8 +193,8 @@ function JobSearch() {
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
                       className={`px-3 py-1 rounded-lg border text-md ${currentPage === pageNum
-                          ? 'bg-primary text-white border-primary'
-                          : 'border-gray-400'
+                        ? 'bg-primary text-white border-primary'
+                        : 'border-gray-400'
                         }`}
                     >
                       {pageNum}
@@ -224,6 +232,7 @@ function JobSearch() {
           />
         </div>
       )}
+      
     </div>
   );
 }

@@ -22,9 +22,12 @@ const Login = () => {
   });
 
   useEffect(() => {
+    if (document.hidden) return;
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % landingImg.length);
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -35,31 +38,24 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+    const username = formData.username.trim();
+    const password = formData.password;
 
-    if (!formData.username || !formData.password) {
+    if (!username || !password) {
       toast.error("Please fill in all fields.");
       return;
     }
     setIsLoading(true);
 
     try {
-      await login(formData.username, formData.password, rememberMe);
+      await login(username, password, rememberMe);
       toast.success("Logged in successfully!");
       navigate("/");
     } catch (err) {
-      let message = "Something went wrong. Please try again.";
-      const errorData = err?.response?.data;
-
-      if (typeof errorData?.detail === "string") {
-        message = errorData.detail;
-      } else if (errorData && typeof errorData === "object") {
-        message = Object.values(errorData).flat().join(" ");
-      } else if (err.message) {
-        message = err.message;
-      }
-
-      toast.error(message);
-    } finally {
+      toast.error(err?.response?.data?.detail || err.message || "Login failed");
+    }
+    finally {
       setIsLoading(false);
     }
   };
@@ -123,6 +119,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <input
+              autoFocus
               type="text"
               name="username"
               value={formData.username}
@@ -145,6 +142,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setPasswordVisible(!passwordVisible)}
+                aria-label={passwordVisible ? "Hide password" : "Show password"}
                 className="absolute inset-y-0 right-0 flex items-center pr-4 text-[hsl(var(--foreground)/70%)] hover:text-[hsl(var(--foreground))]"
               >
                 {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
