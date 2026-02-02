@@ -15,7 +15,7 @@ function Applications() {
     const fetchAppliedJobs = async () => {
       try {
         const response = await axiosJob.get('/applied/');
-        setApplications(response.data);
+        setApplications(response.data.results);
       } catch (error) {
         console.error('Failed to fetch your applied jobs', error);
       } finally {

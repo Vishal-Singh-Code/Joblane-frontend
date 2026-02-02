@@ -18,7 +18,7 @@ const JobList = () => {
   useEffect(() => {
     axiosJob
       .get("/recruiter/jobs")
-      .then((res) => setJobs(res.data))
+      .then((res) => setJobs(res.data.results))
       .catch((err) => console.error("Failed to fetch jobs", err))
       .finally(() => setLoading(false));
   }, []);

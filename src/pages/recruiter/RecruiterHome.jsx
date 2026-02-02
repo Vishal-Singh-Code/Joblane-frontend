@@ -19,7 +19,7 @@ function RecruiterHome() {
     const fetchData = async () => {
       try {
         const response = await axiosJob.get("/recruiter/jobs");
-        const jobData = response.data;
+        const jobData = response.data.results;
         setJobs(jobData);
 
         const total = jobData.length;

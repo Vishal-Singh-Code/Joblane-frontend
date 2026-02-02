@@ -14,7 +14,7 @@ function SavedJobs() {
     const fetchSavedJobs = async () => {
       try {
         const response = await axiosJob.get('/saved/');
-        setSavedJobs(response.data);
+        setSavedJobs(response.data.results);
       } catch (error) {
         console.error('Failed to fetch saved jobs', error);
       } finally {

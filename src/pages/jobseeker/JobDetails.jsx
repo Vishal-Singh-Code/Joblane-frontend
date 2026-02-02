@@ -38,7 +38,7 @@ function JobDetails() {
             if (navigator.share) {
                 await navigator.share({
                     title: job.title,
-                    text: `Check out this job at ${job.company}`,
+                    text: `Check out this job at ${job.company_name}`,
                     url: window.location.href,
                 });
             } else {
@@ -76,7 +76,7 @@ function JobDetails() {
             const res = await axiosJob.post(`/jobs/${id}/apply/`);
             toast.success(res.data.message || "Applied successfully.");
         } catch (error) {
-            if (error.response && error.response.status === 400) {
+            if (error.response && error.response.status === 409) {
                 toast.error(error.response.data.message || "Already applied to this job.");
             } else {
                 console.error("Unexpected error:", error);

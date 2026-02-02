@@ -22,7 +22,7 @@ function ViewApplicants() {
     const fetchApplicants = async () => {
       try {
         const response = await axiosJob.get(`/recruiter/jobs/${id}/applicants/`);
-        setApplicants(response.data);
+        setApplicants(response.data.results);
       } catch (error) {
         console.error('Failed to fetch applicant profiles:', error);
       } finally {

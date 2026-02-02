@@ -37,7 +37,7 @@ function JobSearch() {
     const fetchJobs = async () => {
       try {
         const res = await axiosJob.get('/jobs')
-        setJobs(res.data)
+        setJobs(res.data.results)
       } catch (err) {
         console.error('Failed to fetch jobs', err);
       } finally {

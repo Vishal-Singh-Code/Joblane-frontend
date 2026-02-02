@@ -26,7 +26,7 @@ function JobSeekerHome() {
     const fetchJobs = async () => {
       try {
         const jobsRes = await axiosJob.get("/jobs/");
-        const shuffledJobs = shuffleArray(jobsRes.data).slice(0, 6);
+        const shuffledJobs = shuffleArray(jobsRes.data.results).slice(0, 6);
         setJobs(shuffledJobs);
       } catch (err) {
         console.error("Failed to fetch jobs", err);
@@ -44,10 +44,10 @@ function JobSeekerHome() {
           axios.get("/profile/")
         ]);
 
-        setAppliedCount(appliedRes.data.length);
-        setSavedCount(savedRes.data.length);
+        setAppliedCount(appliedRes.data.results.length);
+        setSavedCount(savedRes.data.results.length);
 
-        const approved = appliedRes.data.filter(job => job.status === 'Approved').length;
+        const approved = appliedRes.data.results.filter(job => job.status === 'Shortlisted').length;
         setApprovedCount(approved);
 
         setUserName(profileRes.data.name || "User");

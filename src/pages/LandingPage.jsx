@@ -18,7 +18,7 @@ function LandingPage() {
     const fetchJobs = async ()=>{
       try{
         const res = await axiosJob.get('/jobs');
-        setJobs(res.data);
+        setJobs(res.data.results);
       }catch(err){
         console.log('Failed to fetch jobs', err);
       }finally{
