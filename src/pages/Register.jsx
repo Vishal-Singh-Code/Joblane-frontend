@@ -124,6 +124,7 @@ const Register = () => {
                 key={i}
                 src={img.url}
                 alt={`Slide ${i + 1}`}
+                fetchPriority='high'
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${i === currentImageIndex ? "opacity-100" : "opacity-0"}`}
               />
             ))}

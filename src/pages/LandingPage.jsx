@@ -56,7 +56,7 @@ function LandingPage() {
             </button>
           </div>
         </div>
-        <img src={heroImg} alt="Hero" className="w-full md:w-[44%] mt-10 md:mt-0 " />
+        <img src="/hero.webp" alt="Hero" fetchPriority="high" width="800" height="600" className="w-full md:w-[44%] mt-10 md:mt-0 " />
       </section>
 
       {/* Marquee Section */}

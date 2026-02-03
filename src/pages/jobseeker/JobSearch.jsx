@@ -5,6 +5,8 @@ import axiosJob from "../../api/axiosJob";
 import FilterJobs from "../../components/jobFilter/FilterJobs";
 import JobCardSkeleton from "../../components/loaders/JobCardSkeleton"
 
+const PAGE_SIZE = 10;
+
 function JobSearch() {
   const [jobs, setJobs] = useState([]);
 
@@ -31,59 +33,66 @@ function JobSearch() {
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
 
+  const [searchInput, setSearchInput] = useState('');
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 500);
 
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
 
   // fetch jobs
   useEffect(() => {
-  const fetchJobs = async () => {
-    setLoading(true);
+    const fetchJobs = async () => {
+      setLoading(true);
 
-    try {
-      const params = { page: currentPage };
+      try {
+        const params = { page: currentPage };
 
-      if (searchQuery.trim()) {
-        params.search = searchQuery.trim();
+        if (searchQuery.trim()) {
+          params.search = searchQuery.trim();
+        }
+
+        if (profileFilter.length > 0) {
+          params.profile = profileFilter.join(",");
+        }
+
+        if (locationFilter.length > 0) {
+          params.location = locationFilter.join(",");
+        }
+
+        if (experienceFilter) {
+          params.experience = experienceFilter;
+        }
+
+        if (jobTypeFilter.length > 0) {
+          params.job_type = jobTypeFilter.join(",");
+        }
+
+        const res = await axiosJob.get("/jobs", { params });
+
+        setJobs(res.data.results);
+        setCount(res.data.count);
+
+      } catch (err) {
+        console.error("Failed to fetch jobs", err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (profileFilter.length > 0) {
-        params.profile = profileFilter.join(",");
-      }
-
-      if (locationFilter.length > 0) {
-        params.location = locationFilter.join(",");
-      }
-
-      if (experienceFilter) {
-        params.experience = experienceFilter;
-      }
-
-      if (jobTypeFilter.length > 0) {
-        params.job_type = jobTypeFilter.join(",");
-      }
-
-      const res = await axiosJob.get("/jobs", { params });
-
-      setJobs(res.data.results);
-      setCount(res.data.count);
-
-    } catch (err) {
-      console.error("Failed to fetch jobs", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchJobs();
-}, [
-  currentPage,
-  searchQuery,
-  profileFilter,
-  locationFilter,
-  experienceFilter,
-  jobTypeFilter,
-]);
+    fetchJobs();
+  }, [
+    currentPage,
+    searchQuery,
+    profileFilter,
+    locationFilter,
+    experienceFilter,
+    jobTypeFilter,
+  ]);
 
   // refresh page after each change
   useEffect(() => {
@@ -91,8 +100,7 @@ function JobSearch() {
   }, [searchQuery, profileFilter, locationFilter, experienceFilter, jobTypeFilter]);
 
 
-  const pageSize = jobs.length || 1;
-  const totalPages = Math.ceil(count / pageSize);
+  const totalPages = Math.ceil(count / PAGE_SIZE);
 
 
   const commonFilterProps = {
@@ -136,8 +144,8 @@ function JobSearch() {
             <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search jobs (e.g. React Developer)"
               className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-2xl sm:rounded-full shadow-md focus:outline-none text-sm sm:text-base"
             />
@@ -151,7 +159,7 @@ function JobSearch() {
         <h1 className="section-heading mb-2">
           {count} Job{count !== 1 && 's'} Found
         </h1>
-        <p className="text-muted-foreground text-sm sm:text-lg text-center">Search and Apply to Latest Job Vacancies & Openings in India</p>
+        <p className="text-muted-foreground text-sm  text-center">Search and Apply to Latest Job Vacancies & Openings in India</p>
       </div>
 
       {/* Filters + Job List */}
@@ -232,7 +240,7 @@ function JobSearch() {
           />
         </div>
       )}
-      
+
     </div>
   );
 }

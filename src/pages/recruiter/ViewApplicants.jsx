@@ -11,92 +11,72 @@ function ViewApplicants() {
   const { id } = useParams();
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState('applied_at');
-  const [sortOrder, setSortOrder] = useState('desc');
-
-  const jobsPerPage = 6;
-
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      try {
-        const response = await axiosJob.get(`/recruiter/jobs/${id}/applicants/`);
-        setApplicants(response.data.results);
-      } catch (error) {
-        console.error('Failed to fetch applicant profiles:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchApplicants();
-  }, [id]);
-
-  const filteredApplicants = useMemo(() => {
-    return applicants.filter(app => {
-      const name = app.applicant_name?.toLowerCase() || '';
-      const email = app.applicant_email?.toLowerCase() || '';
-      return (
-        searchQuery === '' ||
-        name.includes(searchQuery.toLowerCase()) ||
-        email.includes(searchQuery.toLowerCase())
-      );
-    });
-  }, [applicants, searchQuery]);
+  const [totalCount, setTotalCount] = useState(0);
 
 
-  const totalPages = Math.ceil(filteredApplicants.length / jobsPerPage);
-  const indexOfLast = currentPage * jobsPerPage;
-  const indexOfFirst = indexOfLast - jobsPerPage;
-  const currentApplicants = filteredApplicants.slice(indexOfFirst, indexOfLast);
+  const PAGE_SIZE = 10;
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput);
+      setCurrentPage(1);
+    }, 500);
 
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+
+  useEffect(() => {
+    setLoading(true);
+
+    axiosJob.get(`/recruiter/jobs/${id}/applicants/`, {
+      params: {
+        page: currentPage,
+        search: searchQuery,
+        ordering: sortKey,
+      },
+    })
+      .then((res) => {
+        setApplicants(res.data.results);
+        setTotalCount(res.data.count);
+      })
+      .catch(() => console.error('Failed to fetch applicants'))
+      .finally(() => setLoading(false));
+  }, [id, currentPage, searchQuery, sortKey]);
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+  
   const handleSort = (key) => {
     if (sortKey === key) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortKey(key.startsWith('-') ? key.slice(1) : `-${key}`);
     } else {
       setSortKey(key);
-      setSortOrder('asc');
     }
+    setCurrentPage(1);
   };
 
-  const sortedApplicants = [...currentApplicants].sort((a, b) => {
-    let aVal, bVal;
 
-    if (sortKey === 'applicant') {
-      aVal = `${a.applicant?.first_name || ''} ${a.applicant?.last_name || ''}`.toLowerCase();
-      bVal = `${b.applicant?.first_name || ''} ${b.applicant?.last_name || ''}`.toLowerCase();
-    } else if (sortKey === 'status') {
-      aVal = a.status?.toLowerCase?.() || '';
-      bVal = b.status?.toLowerCase?.() || '';
-    } else if (sortKey === 'applied_at') {
-      aVal = new Date(a.applied_at);
-      bVal = new Date(b.applied_at);
-    } else {
-      aVal = a[sortKey];
-      bVal = b[sortKey];
+  const renderSortIcon = (key) => {
+    if (sortKey !== key && sortKey !== `-${key}`) {
+      return <FaSort className="inline text-gray-400 ml-1" />;
     }
 
-    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
-    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
-    return 0;
-  });
+    return sortKey.startsWith('-')
+      ? <FaSortDown className="inline text-primary ml-1" />
+      : <FaSortUp className="inline text-primary ml-1" />;
+  };
 
- const renderSortIcon = (key) => {
-  if (sortKey !== key) return <FaSort className="inline text-gray-400 ml-1" />;
-  return sortOrder === 'asc'
-    ? <FaSortUp className="inline text-primary ml-1" />
-    : <FaSortDown className="inline text-primary ml-1" />;
-};
+
 
 
   return (
     <div className="bg-background min-h-screen px-4 sm:px-10 py-6 text-textDark">
-            <h1 className="section-heading mb-6">Applicant List</h1>
+      <h1 className="section-heading mb-6">Applicant List</h1>
 
       {/* Search */}
       <div className="flex justify-center items-center w-full py-6">
@@ -104,8 +84,9 @@ function ViewApplicants() {
           <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+
             placeholder="Search applicants by name or email..."
             className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
           />
@@ -116,7 +97,7 @@ function ViewApplicants() {
       <div className="max-w-6xl mx-auto overflow-x-auto shadow-sm rounded-xl">
         {loading ? (
           <p className="text-center text-gray-500 py-6 animate-pulse">Loading applicants...</p>
-        ) : currentApplicants.length === 0 ? (
+        ) : applicants.length === 0 ? (
           <div className="text-center text-gray-500 py-10">
             <p className="text-3xl mb-2">😕</p>
             <p>No applicants found.</p>
@@ -139,7 +120,7 @@ function ViewApplicants() {
             </thead>
 
             <tbody className="text-sm text-gray-800 divide-y divide-gray-200 text-center">
-              {sortedApplicants.map((app) => (
+              {applicants.map((app) => (
                 <tr key={app.id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4 whitespace-nowrap font-medium">
                     {app.applicant_name}

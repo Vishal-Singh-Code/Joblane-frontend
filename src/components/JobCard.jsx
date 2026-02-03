@@ -12,10 +12,10 @@ const JobCard = ({ job }) => {
         {/* Top Section */}
         <div className="flex justify-between items-start mb-4">
           <div className="text-left flex-grow pr-2">
-            <h3 className="text-lg sm:text-xl font-semibold text-black leading-tight mb-1 group-hover:text-primary">
+            <h3 className="text-lg font-semibold text-black leading-tight mb-1 group-hover:text-primary">
               {job.title}
             </h3>
-            <p className=" text-md sm:text-lg text-foreground opacity-70">
+            <p className=" text-md text-foreground opacity-70">
               {job.company_name}
             </p>
           </div>

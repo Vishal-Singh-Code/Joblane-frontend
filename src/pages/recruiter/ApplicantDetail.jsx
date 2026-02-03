@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosJob from '../../api/axiosJob';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 function ApplicantDetail() {
   const { id } = useParams();
@@ -9,29 +9,29 @@ function ApplicantDetail() {
   const [applicantData, setApplicantData] = useState(null);
   const [status, setStatus] = useState('');
 
-  useEffect(()=>{
-    const fetchApplicantDetails = async ()=>{
-      try{
-      const res = await axiosJob.get(`/recruiter/applicants/${id}/`)
-      setApplicantData(res.data)
-      setStatus(res.data.status || '');
-      }catch(err){
+  useEffect(() => {
+    const fetchApplicantDetails = async () => {
+      try {
+        const res = await axiosJob.get(`/recruiter/applicants/${id}/`)
+        setApplicantData(res.data)
+        setStatus(res.data.status || '');
+      } catch (err) {
         console.error('Failed to load applicant details:', err)
       }
     }
     fetchApplicantDetails()
-  },[id])
-  
+  }, [id])
+
   const handleStatusChange = useCallback(async (newStatus) => {
-  try {
-    await axiosJob.patch(`/recruiter/applicants/${id}/status/`, { status: newStatus });
-    setStatus(newStatus);
-    toast.success(`Status updated to ${newStatus}`, { id: 'status-toast' });
-  } catch (error) {
-    console.error('Failed to update status:', error);
-    toast.error('Failed to update status', { id: 'status-error' });
-  }
-}, [id]);
+    try {
+      await axiosJob.patch(`/recruiter/applicants/${id}/status/`, { status: newStatus });
+      setStatus(newStatus);
+      toast.success(`Status updated to ${newStatus}`, { id: 'status-toast' });
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      toast.error('Failed to update status', { id: 'status-error' });
+    }
+  }, [id]);
 
 
   if (!applicantData) {
@@ -114,7 +114,7 @@ function ApplicantDetail() {
             onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 border border-border bg-muted text-foreground px-5 py-3 rounded-full hover:bg-muted/80 transition cursor-pointer"
           >
-            ← Back to Applicants
+             Back to Applicants
           </button>
 
           {applicant?.resume && (
@@ -124,7 +124,7 @@ function ApplicantDetail() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full shadow hover:brightness-110 transition"
             >
-              ⬇ Download Resume
+              Download Resume
             </a>
           )}
         </div>

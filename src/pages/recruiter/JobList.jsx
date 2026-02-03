@@ -11,48 +11,54 @@ const JobList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('#');
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
 
-  const jobsPerPage = 5;
+
+const PAGE_SIZE = 10;
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput);
+      setCurrentPage(1);
+    }, 500); // 400–600ms is ideal
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+
+  useEffect(() => {
+    setLoading(true);
+
     axiosJob
-      .get("/recruiter/jobs")
-      .then((res) => setJobs(res.data.results))
-      .catch((err) => console.error("Failed to fetch jobs", err))
+      .get('/recruiter/jobs', {
+        params: {
+          page: currentPage,
+          page_size: PAGE_SIZE,
+          search: searchTerm,
+          ordering: sortOption,
+        },
+      })
+      .then((res) => {
+        setJobs(res.data.results);
+        setTotalCount(res.data.count);
+      })
+      .catch((err) => console.error('Failed to fetch jobs', err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [currentPage, searchTerm, sortOption]);
 
-  const filteredJobs = jobs
-    .filter((job) =>
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.location.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortOption === 'newest') {
-        return new Date(b.created_at) - new Date(a.created_at);
-      } else if (sortOption === 'deadline') {
-        return new Date(a.deadline) - new Date(b.deadline);
-      } else if (sortOption === 'applicants') {
-        return b.applicant_count - a.applicant_count;
-      }
-      return 0;
-    });
-
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
-  const paginatedJobs = filteredJobs.slice(
-    (currentPage - 1) * jobsPerPage,
-    currentPage * jobsPerPage
-  );
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-  if (loading){
-    return <SavedJobSkeleton count={5}  />
+
+  if (loading) {
+    return <SavedJobSkeleton count={5} />
   }
 
   return (
@@ -71,9 +77,9 @@ const JobList = () => {
           className="text-sm sm:text-base bg-white border border-gray-300 px-2 py-3 rounded-lg shadow-sm w-[90px] bg-no-repeat bg-right"
         >
           <option value="#" disabled>Sort By</option>
-          <option value="newest">Newest First</option>
+          <option value="-created_at">Newest First</option>
           <option value="deadline">Deadline</option>
-          <option value="applicants">Applicants</option>
+          <option value="-applicant_count">Applicants</option>
         </select>
 
 
@@ -82,22 +88,19 @@ const JobList = () => {
           <input
             type="text"
             placeholder="Search by title, company, or location..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="bg-white w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-md focus:outline-none text-sm sm:text-base"
           />
         </div>
 
       </div>
 
-      {filteredJobs.length === 0 ? (
+      {!loading && jobs.length === 0 ? (
         <p className="text-gray-500">No jobs found.</p>
       ) : (
         <div className="max-w-5xl mx-auto grid gap-4 grid-cols-1">
-          {paginatedJobs.map((job) => {
+          {jobs.map((job) => {
             const isOpen = new Date(job.deadline) > new Date();
 
             return (
