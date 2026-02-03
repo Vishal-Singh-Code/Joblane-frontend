@@ -29,6 +29,11 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyResetOtp from "./pages/VerifyResetOtp";
 
 function App() {
+  function Admin() {
+    window.location.href = `${import.meta.env.VITE_REACT_APP_API_URL}/admin`;
+    return null;
+  }
+
   return (
     <AuthProvider>
       <Router>
@@ -38,6 +43,7 @@ function App() {
             {/* Public links */}
             <Route index element={<HomeRedirect />} />
             <Route path="jobs" element={<JobSearch />} />
+            <Route path="admin" element={<Admin />}/>
 
             {/* Job Seeker Protected Routes */}
             <Route element={<ProtectedRoute allowedRoles={['jobseeker']} />}>
