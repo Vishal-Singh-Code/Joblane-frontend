@@ -71,17 +71,35 @@ function ViewApplicants() {
       : <FaSortUp className="inline text-primary ml-1" />;
   };
 
-  const handleExport = (status = "all") => {
-    const base = import.meta.env.VITE_REACT_APP_API_URL;
+  const handleExport = async (status = "all") => {
+  const base = import.meta.env.VITE_REACT_APP_API_URL;
 
-    const params = new URLSearchParams({
-      job_id: id,
-      status,
-    });
+  const params = new URLSearchParams({
+    job_id: id,
+    status,
+  });
 
-    window.location.href =
-      `${base}/api/recruiter/applicants/export/?${params.toString()}`;
-  };
+  const res = await fetch(
+    `${base}/api/recruiter/applicants/export/?${params}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    }
+  );
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "applicants.xlsx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
 
 
   return (
