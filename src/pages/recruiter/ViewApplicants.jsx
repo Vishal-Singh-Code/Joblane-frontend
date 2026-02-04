@@ -50,7 +50,7 @@ function ViewApplicants() {
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  
+
   const handleSort = (key) => {
     if (sortKey === key) {
       setSortKey(key.startsWith('-') ? key.slice(1) : `-${key}`);
@@ -71,27 +71,66 @@ function ViewApplicants() {
       : <FaSortUp className="inline text-primary ml-1" />;
   };
 
+  const handleExport = (status = "all") => {
+    const base = import.meta.env.VITE_REACT_APP_API_URL;
 
+    const params = new URLSearchParams({
+      job_id: id,
+      status,
+    });
+
+    window.location.href =
+      `${base}/api/recruiter/applicants/export/?${params.toString()}`;
+  };
 
 
   return (
     <div className="bg-background min-h-screen px-4 sm:px-10 py-6 text-textDark">
       <h1 className="section-heading mb-6">Applicant List</h1>
 
-      {/* Search */}
-      <div className="flex justify-center items-center w-full py-6">
-        <div className="relative w-full max-w-6xl">
-          <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+      <div className="w-full ">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row gap-3 sm:items-center">
 
-            placeholder="Search applicants by name or email..."
-            className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-          />
+          {/* Search + buttons*/}
+          <div className="w-full py-6">
+            <div className="max-w-6xl mx-auto flex flex-col gap-4 sm:flex-row sm:items-center">
+
+              {/* Search bar */}
+              <div className="relative w-full sm:flex-1">
+                <FaSearch className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search applicants by name or email..."
+                  className="bg-white w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
+                />
+              </div>
+
+              {/* Export buttons */}
+              <div className="ml-0 sm:ml-auto grid grid-cols-2 gap-3 sm:flex sm:justify-end">
+                <button
+                  onClick={() => handleExport("all")}
+                  className="w-full sm:w-auto px-4 py-3 rounded-xl border border-border bg-muted text-sm hover:bg-muted/80 transition"
+                >
+                  Export All
+                </button>
+
+                <button
+                  onClick={() => handleExport("Shortlisted")}
+                  className="w-full sm:w-auto px-4 py-3 rounded-xl bg-primary text-primary-foreground text-sm hover:brightness-110 transition"
+                >
+                  Export Shortlisted
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+
         </div>
       </div>
+
 
       {/* Table */}
       <div className="max-w-6xl mx-auto overflow-x-auto shadow-sm rounded-xl">
@@ -104,7 +143,7 @@ function ViewApplicants() {
           </div>
         ) : (
           <table className="min-w-full bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
-            <thead className="bg-gray-100 text-gray-700 text-base font-medium">
+            <thead className="bg-gray-100 text-gray-700 text-sm sm:text-base font-medium">
               <tr>
                 <th className="px-6 py-3 cursor-pointer" onClick={() => handleSort('applicant_name')}>
                   Applicant {renderSortIcon('applicant')}
@@ -119,7 +158,7 @@ function ViewApplicants() {
               </tr>
             </thead>
 
-            <tbody className="text-sm text-gray-800 divide-y divide-gray-200 text-center">
+            <tbody className="text-xs sm:text-sm text-gray-800 divide-y divide-gray-200 text-center">
               {applicants.map((app) => (
                 <tr key={app.id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4 whitespace-nowrap font-medium">
@@ -142,7 +181,7 @@ function ViewApplicants() {
                   <td className="px-6 py-4">
                     <button
                       onClick={() => navigate(`/recruiter/applicant/${app.id}`)}
-                      className="text-primary hover:underline font-medium text-sm"
+                      className="text-primary hover:underline font-medium text-xs sm:text-sm"
                     >
                       View
                     </button>
