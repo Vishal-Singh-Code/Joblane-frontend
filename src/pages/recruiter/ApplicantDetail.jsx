@@ -112,10 +112,11 @@ function ApplicantDetail() {
         <div className="text-center mt-10 flex flex-col sm:flex-row sm:justify-center sm:items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 border border-border bg-muted text-foreground px-5 py-3 rounded-full hover:bg-muted/80 transition cursor-pointer"
+            className="inline-flex items-center gap-2 border border-border/60 bg-muted text-foreground px-5 py-3 rounded-full hover:bg-muted/80 transition"
           >
-             Back to Applicants
+            Back to Applicants
           </button>
+
 
           {applicant?.resume && (
             <a
@@ -124,7 +125,7 @@ function ApplicantDetail() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full shadow hover:brightness-110 transition"
             >
-              Download Resume
+              View Resume
             </a>
           )}
         </div>

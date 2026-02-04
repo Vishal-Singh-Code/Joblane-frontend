@@ -13,8 +13,6 @@ const GoogleLoginButton = () => {
 
     onSuccess: async (tokenResponse) => {
       const loadingToast = toast.loading("Signing you in...");
-      console.log("Google tokenResponse:", tokenResponse);
-      console.log("authorization code:", tokenResponse.code);
 
       try {
         const code = tokenResponse.code;

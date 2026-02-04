@@ -5,7 +5,6 @@ import axiosJob from "../api/axiosJob";
 import { companyLogos } from "../data/landingImg"
 import CompactJobCardSkeleton from '../components/loaders/CompactJobCardSkeleton'
 
-const heroImg = "https://internshala.com/static/images/homepage/banner/r767_v1.webp";
 
 function LandingPage() {
   const navigate = useNavigate()
@@ -20,7 +19,7 @@ function LandingPage() {
         const res = await axiosJob.get('/jobs');
         setJobs(res.data.results);
       }catch(err){
-        console.log('Failed to fetch jobs', err);
+        console.error('Failed to fetch jobs', err);
       }finally{
         setLoading(false)
       }

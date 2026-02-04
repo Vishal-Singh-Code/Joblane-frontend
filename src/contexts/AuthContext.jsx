@@ -145,7 +145,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const verifyForgotOtp = async (email, otp) => {
-    console.log("Sending payload:", { email, otp });
     try {
       const res = await axiosInstance.post("/forgot-password/verify-otp/", { email, otp });
       return res.data;

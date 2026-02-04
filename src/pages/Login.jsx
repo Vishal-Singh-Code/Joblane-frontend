@@ -96,10 +96,11 @@ const Login = () => {
               </div>
               <button
                 onClick={() => navigate("/")}
-                className="bg-white text-[hsl(var(--foreground))] px-4 py-2 rounded-full shadow-md hover:bg-gray-200 transition"
+                className="text-sm text-gray-700 hover:text-gray-900 bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm transition"
               >
-                ← Back to website
+                ← Back to Home
               </button>
+
             </div>
             <h2 className="text-4xl font-semibold mb-8">{landingImg[currentImageIndex].slogan}</h2>
           </div>
