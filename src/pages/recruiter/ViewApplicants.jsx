@@ -71,26 +71,23 @@ function ViewApplicants() {
       : <FaSortUp className="inline text-primary ml-1" />;
   };
 
-  const handleExport = async (status = "all") => {
-  const base = import.meta.env.VITE_REACT_APP_API_URL;
-
-  const params = new URLSearchParams({
+const handleExport = async (status = "all") => {
+  const params = {
     job_id: id,
     status,
-  });
+  };
 
-  const res = await fetch(
-    `${base}/api/recruiter/applicants/export/?${params}`,
+  const res = await axiosJob.get(
+    "/recruiter/applicants/export/",
     {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access")}`,
-      },
+      params,
+      responseType: "blob", // 🔥 important
     }
   );
 
-  const blob = await res.blob();
-  const url = window.URL.createObjectURL(blob);
+  const url = window.URL.createObjectURL(
+    new Blob([res.data])
+  );
 
   const a = document.createElement("a");
   a.href = url;
