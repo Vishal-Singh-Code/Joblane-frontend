@@ -1,8 +1,10 @@
 import axios from "axios";
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+// const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+import { AUTH_BASE } from '../config/api'
+
 
 const axiosInstance = axios.create({
-  baseURL: `${API_URL}/auth`,
+  baseURL: AUTH_BASE,
   headers: {
     "Content-Type": "application/json",
   },
@@ -42,7 +44,7 @@ axiosInstance.interceptors.response.use(
 
       if (user?.refresh) {
         try {
-          const res = await axios.post(`${API_URL}/auth/refresh/`, {
+          const res = await axios.post(`${AUTH_BASE}/refresh/`, {
             refresh: user.refresh,
           });
 

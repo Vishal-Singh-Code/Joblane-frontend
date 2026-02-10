@@ -126,7 +126,7 @@ const Login = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Username"
+              placeholder="Username or Email"
               className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
               required
             />
