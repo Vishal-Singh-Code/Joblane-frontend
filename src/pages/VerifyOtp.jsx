@@ -41,10 +41,10 @@ const VerifyOtp = () => {
 
   const handleVerify = async (e) => {
     e.preventDefault();
-    setError("");
+    // setError("");
 
     if (!otp || otp.length !== 6) {
-      setError("Please enter a valid 6-digit OTP.");
+      toast.error("Please enter a valid 6-digit OTP.");
       return;
     }
 
@@ -63,7 +63,7 @@ const VerifyOtp = () => {
     } catch (err) {
       console.error(err);
       const message = err.message || "OTP verification failed.";
-      setError(message);
+      // setError(message);
       toast.error(message);
     } finally {
       setLoading(false);
@@ -106,7 +106,6 @@ const VerifyOtp = () => {
             className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-xl tracking-widest"
             autoFocus
           />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"

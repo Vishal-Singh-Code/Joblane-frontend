@@ -109,7 +109,7 @@ function PostJob() {
   /* ⏳ LOADING STATE */
   if (hasCompany === null) {
     return (
-      <div className="text-center mt-20 text-lg font-semibold">
+      <div className="text-center mt-20 pb-20 text-lg font-semibold">
         Checking company profile...
       </div>
     );

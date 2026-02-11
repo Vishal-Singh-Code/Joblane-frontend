@@ -96,3 +96,90 @@ body {
 .section-heading {
     @apply text-3xl md:text-4xl font-bold tracking-tight text-primary mb-2 text-center;
   }
+  
+/* Light overlay */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+/* Container */
+.joblane-wave-loader {
+  text-align: center;
+  color: #0f172a; /* slate-900 */
+}
+
+/* Brand text */
+.joblane-wave-loader h1 {
+  font-size: 54px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #2563eb; /* brand blue */
+  min-width: 240px;
+}
+
+/* Wave letters */
+.joblane-wave-loader h1 span {
+  display: inline-block;
+  animation: wave 1.4s infinite ease-in-out;
+}
+
+/* Career path line */
+.career-line {
+  position: relative;
+  width: 160px;
+  height: 4px;
+  background: rgba(37, 99, 235, 0.2);
+  margin: 18px auto 10px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.career-line span {
+  position: absolute;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #2563eb,
+    transparent
+  );
+  animation: moveLine 1.2s infinite ease-in-out;
+}
+
+/* Subtitle */
+.joblane-wave-loader p {
+  font-size: 13px;
+  color: #475569; /* slate-600 */
+  letter-spacing: 0.4px;
+}
+
+/* Animations */
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(-6px); /* softer motion */
+    opacity: 1;
+  }
+}
+
+@keyframes moveLine {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(210px);
+  }
+}

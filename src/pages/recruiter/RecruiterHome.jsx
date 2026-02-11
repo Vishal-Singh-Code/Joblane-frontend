@@ -18,7 +18,7 @@ function RecruiterHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosJob.get("/recruiter/jobs");
+        const response = await axiosJob.get("/recruiter/jobs",{showGlobalLoader: true});
         const jobData = response.data.results;
         setJobs(jobData);
 
@@ -39,7 +39,7 @@ function RecruiterHome() {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("/profile"); // <- shorter, clean
+        const response = await axios.get("/profile"); 
         const profileData = response.data;
         const fullName = profileData.name || 'Recruiter';
         const firstName = fullName?.split(' ')[0] || 'Recruiter';

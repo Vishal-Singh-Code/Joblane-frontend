@@ -16,7 +16,7 @@ function LandingPage() {
   useEffect(() => {
     const fetchJobs = async ()=>{
       try{
-        const res = await axiosJob.get('/jobs');
+        const res = await axiosJob.get('/jobs',{showGlobalLoader: true});
         setJobs(res.data.results);
       }catch(err){
         console.error('Failed to fetch jobs', err);

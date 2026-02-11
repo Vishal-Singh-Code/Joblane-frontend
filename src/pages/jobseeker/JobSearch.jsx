@@ -72,7 +72,7 @@ function JobSearch() {
           params.job_type = jobTypeFilter.join(",");
         }
 
-        const res = await axiosJob.get("/jobs", { params });
+        const res = await axiosJob.get("/jobs", {params});
 
         setJobs(res.data.results);
         setCount(res.data.count);

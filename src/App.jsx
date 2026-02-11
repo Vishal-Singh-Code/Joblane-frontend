@@ -28,22 +28,41 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyResetOtp from "./pages/VerifyResetOtp";
 
+
+import { useEffect } from "react";
+import { useLoader } from "./contexts/LoaderContext";
+import { setupAxiosInterceptors } from "./api/setupAxiosInterceptors";
+
+import ScrollToTop from "./components/ScrollTop";
+
+import axiosAuth from "./api/axios";
+import axiosJob from "./api/axiosJob";
+
 function App() {
+  const { showLoader, hideLoader } = useLoader();
+
+  useEffect(() => {
+    setupAxiosInterceptors(axiosAuth, showLoader, hideLoader);
+    setupAxiosInterceptors(axiosJob, showLoader, hideLoader);
+  }, [showLoader, hideLoader]);
+
   function Admin() {
     window.location.href = `${import.meta.env.VITE_REACT_APP_API_URL}/admin`;
     return null;
   }
 
+
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
 
             {/* Public links */}
             <Route index element={<HomeRedirect />} />
             <Route path="jobs" element={<JobSearch />} />
-            <Route path="admin" element={<Admin />}/>
+            <Route path="admin" element={<Admin />} />
 
             {/* Job Seeker Protected Routes */}
             <Route element={<ProtectedRoute allowedRoles={['jobseeker']} />}>
@@ -61,7 +80,7 @@ function App() {
               <Route path="jobs/:id/applicants" element={<ViewApplicants />} />
               <Route path="applicant/:id" element={<ApplicantDetail />} />
             </Route>
-            
+
             <Route path='*' element={<Missing />} />
           </Route>
 
@@ -69,9 +88,9 @@ function App() {
             <Route path="register" element={<Register />} />
             <Route path="verify-otp" element={<VerifyOtp />} />
             <Route path="login" element={<Login />} />
-            <Route path="forgot-password" element={<ForgotPassword/>}/>
+            <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="forgot-password/verify-otp" element={<VerifyResetOtp />} />
-            <Route path="forgot-password/reset" element={<ResetPassword/>}/>
+            <Route path="forgot-password/reset" element={<ResetPassword />} />
           </Route>
 
         </Routes>

@@ -25,7 +25,7 @@ function JobSeekerHome() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const jobsRes = await axiosJob.get("/jobs/");
+        const jobsRes = await axiosJob.get("/jobs/",{showGlobalLoader: true});
         const shuffledJobs = shuffleArray(jobsRes.data.results).slice(0, 6);
         setJobs(shuffledJobs);
       } catch (err) {

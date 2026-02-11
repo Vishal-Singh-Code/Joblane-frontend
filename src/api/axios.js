@@ -1,5 +1,4 @@
 import axios from "axios";
-// const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 import { AUTH_BASE } from '../config/api'
 
 

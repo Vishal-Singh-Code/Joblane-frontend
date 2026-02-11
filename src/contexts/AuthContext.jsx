@@ -159,16 +159,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // const resendForgotOtp = async (email) => {
-  //   try {
-  //     const res = await axiosInstance.post("/forgot-password/", { email });
-  //     return res.data;
-  //   } catch (err) {
-  //     const msg = err?.response?.data?.error || err.message;
-  //     throw new Error(msg);
-  //   }
-  // };
-
   const resetPassword = async (data) => {
     try {
       const res = await axiosInstance.post("/forgot-password/reset/", data);
@@ -192,7 +182,6 @@ const AuthProvider = ({ children }) => {
       googleLogin,
       forgotPassword,
       verifyForgotOtp,
-      // resendForgotOtp,
       resetPassword
     }),
     [user, loading]

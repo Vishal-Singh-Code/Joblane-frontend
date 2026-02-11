@@ -229,7 +229,7 @@ const Register = () => {
                 type={passwordVisible ? "text" : "password"}
                 name="password"
                 value={formData.password}
-                placeholder="Enter your password"
+                placeholder="Password"
                 onChange={handleChange}
                 className="w-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] placeholder-[hsl(var(--foreground)/60%)] p-4 pr-12 rounded-xl focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
                 required
