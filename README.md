@@ -1,55 +1,94 @@
 # JobLane Frontend
 
-**JobLane** is India’s #1 Hiring Platform built using **React.js** and **Tailwind CSS**. This repository contains the frontend codebase that allows job seekers and recruiters to seamlessly interact with the platform.
+**JobLane** is a modern, full-stack job hiring platform frontend built with React.js and Tailwind CSS, designed to connect job seekers and recruiters through a seamless, secure, and responsive user experience.
 
-JobLane is a full-stack job hiring platform that connects job seekers with recruiters across India. It features secure authentication, role-based access, and a modern responsive UI.
+This repository contains the frontend codebase of JobLane, focusing on scalability, clean UI, and real-world hiring workflows.
 
+
+## Key Highlights
+
+- Role-based access (Job Seeker, Recruiter, Admin)
+- JWT-based authentication with Google OAuth integration
+- Email-based OTP verification
+- Protected routes using React Router
+- Centralized API handling using Axios with interceptors
+- Resume upload & saved jobs functionality
+- Fully responsive UI using Tailwind CSS
+- Production-ready deployment with Vercel
 
 ## Features
 
-- Responsive and modern UI
-- JWT & Google OAuth authentication
-- Job search, filtering, and application
-- Recruiter dashboard to post/manage jobs
-- View applicants and success stories
+### Job Seekers
+- Browse and search job listings
+- Filter jobs based on criteria
+- Apply for jobs with resume upload
+- Save jobs for later
+- View detailed job descriptions
+
+### Recruiters
+- Recruiter-specific dashboard
+- Post and manage job listings
+- View applicants for posted jobs
+- Role-based access control
+
+### Admin
+- Admin analytics dashboard (backend-powered)
+- Platform-level monitoring and management
+
+### Authentication & Security
+- JWT authentication for secure sessions
+- Google OAuth login using `@react-oauth/google`
+- Email-based OTP verification
+- Protected routes and authorization handling
 
 ## Tech Stack
-
-- React.js
-- Tailwind CSS
-- React Router
-- Axios
-- Google OAuth (`@react-oauth/google`)
+- **React.js** – Component-based UI
+- **Tailwind CSS** – Utility-first styling
+- **React Router** – Client-side routing
+- **Axios** – API communication
+- **Google OAuth** – Social authentication
 
 ##  Live Demo
 
 Frontend: [https://joblane-frontend.vercel.app/](https://joblane-frontend.vercel.app/)  
 Backend API: [https://joblane-backend-0eqs.onrender.com/](https://joblane-backend-0eqs.onrender.com/)
 
-## Setup Instructions
+*The backend is built using Django REST Framework with JWT authentication.*
 
-```bash
-git clone https://github.com/vishal-singh-code/joblane-frontend.git
-npm install
-npm run dev
-```
 
 ## Project Structure
 ```
 src/
-├── api/
-├── assets/
-├── components/
-├── contexts/
-├── data/
-├── pages/
-├── routes/
-├── App.jsx
-└── index.css
-
+├── api/          # Axios instances & API services
+├── assets/       # Static assets
+├── components/   # Reusable UI components
+├── config/       # Backend Endpoints
+├── contexts/     # Global state & auth context
+├── data/         # Static and mock data
+├── pages/        # Application pages
+├── routes/       # Route definitions & protected routes
+├── App.jsx       # Root component
+└── index.css     # Global styles
 ```
 
+## Setup Instructions
+
+### Prerequisites
+- Node.js (v16+ recommended)
+- npm or yarn
+
+### Installation
+```bash
+git clone https://github.com/vishal-singh-code/joblane-frontend.git
+cd joblane-frontend
+npm install
+npm run dev
+```
+The application will run on:  
+http://localhost:5173
+
 ## Screenshots
+Below are some key UI screens from the JobLane frontend.
 
 ### Landing Page
 ![Landing Page](./screenshots/landingPage.png)
@@ -60,15 +99,28 @@ src/
 ### Job Details
 ![Job Details](./screenshots/jobDetails.png)
 
-### Recruiter Dashboard
-![Recruiter Dashboard](./screenshots/recruiter.png)
-
 ### Login
 ![User Login](./screenshots/login.png)
+![User Register](./screenshots/register.png)
+
+### Recruiter Dashboard
+![Recruiter Dashboard](./screenshots/recruiter.png)
+![Recruiter Jobpost](./screenshots/JobPosts.png)
+![Recruiter ApplicantList](./screenshots/ApplicantList.png)
 
 
+
+## Future Enhancements
+- AI-based job recommendation system
+- Resume parsing & skill extraction
+- Real-time notifications
+- Advanced recruiter analytics
 
 ##  Contributing
 
-Contributions, issues, and feature requests are welcome!  
-Feel free to open an issue or submit a pull request.
+Contributions are welcome!  
+If you’d like to improve this project:
+1. Fork the repository
+2. Create a new feature branch
+3. Commit your changes
+4. Open a pull request
