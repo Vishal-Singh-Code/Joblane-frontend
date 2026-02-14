@@ -31,32 +31,42 @@ function LandingPage() {
     <div className="bg-background text-foreground">
       
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between px-10 sm:px-15 bg-card">
-        <div className="md:w-1/2 text-center md:text-left mt-20 mb-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-primary leading-tight">
-            India’s #1 Hiring Platform.
-          </h1>
-          <p className="mt-4 sm:text-lg text-foreground opacity-80">
-            Find your dream job or the perfect hire in minutes.
-          </p>
-          <div className="mt-12 flex flex-wrap justify-center md:justify-start gap-4">
-            <button
-              className="cosmic-button cursor-pointer"
-              onClick={() => navigate('/login')}
-            >
-              Login
-            </button>
+    <section className="flex flex-col md:flex-row items-center justify-between px-10 sm:px-15 bg-card">
+  <div className="md:w-1/2 text-center md:text-left mt-20 mb-16">
+    <h1 className="text-3xl md:text-5xl font-bold text-primary leading-tight">
+      Your Fastlane to the Right Career.
+    </h1>
 
-            <button
-              className="cosmic-button-outline cursor-pointer"
-              onClick={() => navigate('/register')}
-            >
-              Register
-            </button>
-          </div>
-        </div>
-        <img src="/hero.webp" alt="Hero" fetchPriority="high" width="800" height="600" className="w-full md:w-[44%] mt-10 md:mt-0 " />
-      </section>
+    <p className="mt-4 sm:text-lg text-foreground opacity-80">
+      Find your next opportunity or hire top talent in minutes.
+    </p>
+
+    <div className="mt-12 flex flex-wrap justify-center md:justify-start gap-4">
+      <button
+        className="cosmic-button cursor-pointer"
+        onClick={() => navigate('/login')}
+      >
+        Login
+      </button>
+
+      <button
+        className="cosmic-button-outline cursor-pointer"
+        onClick={() => navigate('/register')}
+      >
+        Register
+      </button>
+    </div>
+  </div>
+
+  <img
+    src="/hero.webp"
+    alt="JobLane hiring platform hero"
+    fetchPriority="high"
+    width="800"
+    height="600"
+    className="w-full md:w-[44%] mt-10 md:mt-0"
+  />
+</section>
 
       {/* Marquee Section */}
       <section className="bg-white overflow-hidden border-b flex items-center">
