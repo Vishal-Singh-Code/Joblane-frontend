@@ -91,7 +91,7 @@ function Applications() {
                 <div className="flex flex-col items-end justify-center gap-1 min-w-[90px] text-right">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-xs sm:text-xs font-semibold 
-                      ${status === 'Approved'
+                      ${status === 'Shortlisted'
                         ? 'bg-green-100 text-green-700'
                         : status === 'Rejected'
                           ? 'bg-red-100 text-red-700'

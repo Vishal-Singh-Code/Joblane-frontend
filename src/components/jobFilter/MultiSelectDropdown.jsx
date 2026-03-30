@@ -10,7 +10,14 @@ function MultiSelectDropdown({
   showDropdown,
   setShowDropdown
 }) {
-  const filteredOptions = options.filter(opt =>
+  const normalizedOptions = options.filter((option, index, array) => {
+    const normalizedOption = option.trim().toLowerCase();
+    return index === array.findIndex(
+      (item) => item.trim().toLowerCase() === normalizedOption
+    );
+  });
+
+  const filteredOptions = normalizedOptions.filter(opt =>
     opt.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -20,6 +27,7 @@ function MultiSelectDropdown({
     } else {
       onChange([...selected, option]);
     }
+
     setSearchValue('');
     setShowDropdown(false);
   };

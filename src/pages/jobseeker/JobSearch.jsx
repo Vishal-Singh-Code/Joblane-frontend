@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import JobCard from "../../components/JobCard";
 import { FaSearch } from 'react-icons/fa';
 import axiosJob from "../../api/axiosJob";
@@ -34,6 +34,7 @@ function JobSearch() {
   const [count, setCount] = useState(0);
 
   const [searchInput, setSearchInput] = useState('');
+  const previousFilterSignatureRef = useRef('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -43,9 +44,27 @@ function JobSearch() {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-
   // fetch jobs
   useEffect(() => {
+    const filterSignature = JSON.stringify({
+      searchQuery: searchQuery.trim(),
+      profileFilter,
+      locationFilter,
+      experienceFilter,
+      jobTypeFilter,
+    });
+
+    const filtersChanged = previousFilterSignatureRef.current !== filterSignature;
+
+    if (filtersChanged) {
+      previousFilterSignatureRef.current = filterSignature;
+
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return;
+      }
+    }
+
     const fetchJobs = async () => {
       setLoading(true);
 
@@ -72,11 +91,10 @@ function JobSearch() {
           params.job_type = jobTypeFilter.join(",");
         }
 
-        const res = await axiosJob.get("/jobs", {params});
+        const res = await axiosJob.get("/jobs", { params });
 
         setJobs(res.data.results);
         setCount(res.data.count);
-
       } catch (err) {
         console.error("Failed to fetch jobs", err);
       } finally {
@@ -93,11 +111,6 @@ function JobSearch() {
     experienceFilter,
     jobTypeFilter,
   ]);
-
-  // refresh page after each change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, profileFilter, locationFilter, experienceFilter, jobTypeFilter]);
 
 
   const totalPages = Math.ceil(count / PAGE_SIZE);
@@ -123,6 +136,8 @@ function JobSearch() {
     showLocationDropdown,
     setShowLocationDropdown,
 
+    searchInput,
+    setSearchInput,
     setSearchQuery,
     closeMobileFilter: null
   };

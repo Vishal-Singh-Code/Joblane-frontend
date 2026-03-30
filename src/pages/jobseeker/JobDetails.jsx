@@ -119,7 +119,7 @@ function JobDetails() {
                     </div>
                     <div className="flex flex-col">
                         <span className="font-medium">Experience</span>
-                        <span >{job.experience}</span>
+                        <span >{job.experience} years</span>
                     </div>
                     <div className="flex flex-col">
                         <span className="font-medium">Apply by</span>

@@ -33,6 +33,8 @@ function FilterJobs({
   setShowProfileDropdown,
 
   // mobile view
+  searchInput,
+  setSearchInput,
   setSearchQuery,
   closeMobileFilter,
 }) {
@@ -118,16 +120,17 @@ function FilterJobs({
             type="button"
             className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:brightness-110 transition"
             onClick={() => {
-  if (closeMobileFilter) closeMobileFilter();
-}}
-
+              if (closeMobileFilter) closeMobileFilter();
+            }}
           >
-            Search
+            Show Results
           </button>
           <button
             type="button"
             onClick={() => {
+              setSearchInput('');
               setSearchQuery('');
+              setProfileSearch('');
               setLocationSearch('');
               setProfileFilter([]);
               setLocationFilter([]);
@@ -177,6 +180,8 @@ FilterJobs.propTypes = {
   setShowLocationDropdown: PropTypes.func.isRequired,
 
   // mobile phone
+  searchInput: PropTypes.string.isRequired,
+  setSearchInput: PropTypes.func.isRequired,
   setSearchQuery: PropTypes.func.isRequired,
   closeMobileFilter: PropTypes.func,
 };
